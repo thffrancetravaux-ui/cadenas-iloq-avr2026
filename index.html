@@ -231,7 +231,7 @@ let map = null;
 let markers = [];
 
 async function loadData() {
-  if (SHEET_ID === '1o8qfXnQVHJeqb7EnO_tV9C3MCspqsTFV9DLeMrnXk2E') {
+  if (!SHEET_ID || SHEET_ID === 'REMPLACER_PAR_ID_GOOGLE_SHEET') {
     document.getElementById('config-warning').style.display = 'block';
     document.getElementById('tbody').innerHTML = '<tr><td colspan="9" class="empty">Configurez d\'abord le SHEET_ID dans le code.</td></tr>';
     return;
