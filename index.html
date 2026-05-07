@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///C:/Users/y.hamouda/Downloads/index_12.html -->
+<!-- saved from url=(0050)file:///C:/Users/y.hamouda/Downloads/index_13.html -->
 <html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Suivi Iloq — Lot Avr26 — THF</title>
-<link rel="stylesheet" href="./index_files/leaflet.min.css">
+
+<!-- Leaflet CSS avec cascade de CDN (si une est bloquée, on bascule) -->
+<link rel="stylesheet" href="./index_files/leaflet.css" onerror="this.onerror=null;this.href=&#39;https://unpkg.com/leaflet@1.9.4/dist/leaflet.css&#39;">
 <link rel="stylesheet" href="./index_files/tabler-icons.min.css">
+
 <style>
 :root {
   --bg: #f5f6f8;
@@ -48,6 +51,7 @@ header .subtitle { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
 .tab:hover { color: var(--text); }
 .section { display: none; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px; }
 .section.active { display: block; }
+.section.no-padding { padding: 0; overflow: hidden; }
 .toolbar { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
 .toolbar input, .toolbar select { padding: 7px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; background: var(--surface); }
 .toolbar input { flex: 1; min-width: 220px; }
@@ -69,9 +73,61 @@ tr:hover td { background: var(--bg); }
 .region-bar { flex: 1; height: 12px; background: var(--bg); border-radius: 6px; overflow: hidden; position: relative; }
 .region-fill { height: 100%; background: var(--green); transition: width 0.3s; }
 .region-stat { font-size: 13px; color: var(--text-muted); min-width: 130px; text-align: right; }
-#map { height: 520px; border-radius: 6px; border: 1px solid var(--border); }
-.map-legend { display: flex; gap: 16px; margin-top: 10px; font-size: 12px; color: var(--text-muted); }
-.legend-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 6px; vertical-align: middle; border: 2px solid white; box-shadow: 0 0 0 1px rgba(0,0,0,0.2); }
+
+/* Carte plein onglet */
+.map-toolbar {
+  display: flex;
+  gap: 10px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  align-items: center;
+}
+.map-toolbar input, .map-toolbar select {
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 13px;
+  background: var(--surface);
+}
+.map-toolbar input { flex: 1; min-width: 220px; }
+.map-toolbar input:focus, .map-toolbar select:focus { outline: 2px solid var(--primary); outline-offset: -1px; }
+.map-stats { display: flex; gap: 10px; font-size: 12px; color: var(--text-muted); margin-left: auto; }
+.map-stats .stat { display: inline-flex; align-items: center; gap: 4px; }
+.map-stats .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.map-stats strong { color: var(--text); }
+
+#map { height: 650px; width: 100%; }
+.map-loading { text-align: center; padding: 60px; color: var(--text-muted); }
+
+/* Popup */
+.leaflet-popup-content { font-size: 13px; line-height: 1.5; min-width: 200px; }
+.leaflet-popup-content h4 { font-size: 13px; color: var(--primary); margin-bottom: 6px; font-family: monospace; font-weight: 600; }
+.popup-status { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 500; }
+.popup-status.ok { background: var(--green-light); color: #27500A; }
+.popup-status.nok { background: var(--red-light); color: #791F1F; }
+.popup-status.ano { background: var(--amber-light); color: #854F0B; }
+.popup-status.raf { background: var(--gray-light); color: #444441; }
+.popup-iloq { font-family: monospace; background: #f3f4f6; padding: 1px 6px; border-radius: 3px; font-size: 12px; }
+.popup-actions { margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border); display: flex; gap: 6px; flex-wrap: wrap; }
+.popup-btn { padding: 4px 10px; border-radius: 4px; font-size: 11px; text-decoration: none; border: 1px solid var(--border); background: var(--surface); color: var(--text); display: inline-flex; align-items: center; gap: 4px; }
+.popup-btn:hover { background: var(--bg); }
+.popup-btn.primary { background: var(--primary); color: white; border-color: var(--primary); }
+.popup-btn.primary:hover { background: #163d61; }
+
+.legend-floating {
+  background: var(--surface);
+  padding: 8px 10px;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  font-size: 11px;
+  line-height: 1.7;
+}
+.legend-floating h5 { font-size: 10px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; letter-spacing: 0.5px; font-weight: 600; }
+.legend-floating .item { display: flex; align-items: center; gap: 6px; }
+.legend-floating .dot { width: 9px; height: 9px; border-radius: 50%; }
+
 .fin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 20px; }
 .fin-card { background: var(--bg); border-radius: 8px; padding: 16px; }
 .fin-label { font-size: 12px; color: var(--text-muted); }
@@ -87,9 +143,11 @@ a:hover { text-decoration: underline; }
   .app { padding: 16px; }
   header h1 { font-size: 18px; }
   .kpi-value { font-size: 20px; }
+  #map { height: 500px; }
+  .map-stats { display: none; }
 }
 </style>
-</head>
+<script src="./index_files/leaflet.js.télécharger"></script><script src="./index_files/papaparse.min.js.télécharger"></script></head>
 <body>
 <div class="app">
 
@@ -139,15 +197,8 @@ a:hover { text-decoration: underline; }
     <table>
       <thead>
         <tr>
-          <th>Code FR</th>
-          <th>Site</th>
-          <th>Ville</th>
-          <th>Région</th>
-          <th>Statut</th>
-          <th>N° série Iloq</th>
-          <th>Date pose</th>
-          <th>Tech.</th>
-          <th>PDF</th>
+          <th>Code FR</th><th>Site</th><th>Ville</th><th>Région</th><th>Statut</th>
+          <th>N° série Iloq</th><th>Date pose</th><th>Tech.</th><th>PDF</th>
         </tr>
       </thead>
       <tbody id="tbody"><tr><td colspan="9" class="empty">❌ Erreur : Failed to fetch<br><small>Vérifier que le Sheet est bien publié sur le web.</small></td></tr></tbody>
@@ -161,15 +212,28 @@ a:hover { text-decoration: underline; }
   <div class="region-list" id="region-list"></div>
 </div>
 
-<div id="tab-map" class="section">
-  <div style="font-size:13px; color:var(--text-muted); margin-bottom:10px;">Localisation des sites — clic sur un marqueur pour les détails</div>
-  <div id="map"></div>
-  <div class="map-legend">
-    <span><span class="legend-dot" style="background:#1D9E75;"></span>OK posé</span>
-    <span><span class="legend-dot" style="background:#C53030;"></span>NOK</span>
-    <span><span class="legend-dot" style="background:#B7791F;"></span>Anomalie</span>
-    <span><span class="legend-dot" style="background:#9ca3af;"></span>Reste à faire</span>
+<div id="tab-map" class="section no-padding">
+  <div class="map-toolbar">
+    <input type="text" id="map-search" placeholder="🔍 Recherche carte : Code FR, ville, N° série Iloq...">
+    <select id="map-filter-status">
+      <option value="">Tous statuts</option>
+      <option value="OK">OK</option>
+      <option value="NOK">NOK</option>
+      <option value="Anomalie">Anomalie</option>
+      <option value="RAF">RAF</option>
+    </select>
+    <select id="map-filter-region">
+      <option value="">Toutes régions</option>
+    </select>
+    <div class="map-stats">
+      <span class="stat"><span class="dot" style="background:var(--green)"></span><strong id="m-ok">—</strong> OK</span>
+      <span class="stat"><span class="dot" style="background:var(--red)"></span><strong id="m-nok">—</strong> NOK</span>
+      <span class="stat"><span class="dot" style="background:var(--amber)"></span><strong id="m-ano">—</strong> Ano.</span>
+      <span class="stat"><span class="dot" style="background:var(--gray)"></span><strong id="m-raf">—</strong> RAF</span>
+      <span class="stat"><strong id="m-shown">—</strong> affichés</span>
+    </div>
   </div>
+  <div id="map"><div class="map-loading"><span class="loader"></span> Chargement de la carte...</div></div>
 </div>
 
 <div id="tab-finance" class="section">
@@ -202,33 +266,65 @@ a:hover { text-decoration: underline; }
 
 </div>
 
-<script src="./index_files/papaparse.min.js.télécharger"></script>
-<script src="./index_files/leaflet.min.js.télécharger"></script>
 <script>
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRpKD5N4jRIF-B4DpetLMtZDMJs7Ks2HOtI3jcEcm78f3u192_-gQHslK0KQLXYp2787NtipInOPuBx/pub?gid=1033568124&single=true&output=csv';
+// === Loader de scripts en cascade pour résister aux blocages réseau ===
+function loadScript(urls, onLoad, onFail) {
+  let idx = 0;
+  function tryNext() {
+    if (idx >= urls.length) { onFail && onFail(); return; }
+    const s = document.createElement('script');
+    s.src = urls[idx++];
+    s.onload = onLoad;
+    s.onerror = tryNext;
+    document.head.appendChild(s);
+  }
+  tryNext();
+}
 
+let leafletReady = false;
+let papaReady = false;
+
+// Charger Leaflet (3 CDN en cascade)
+loadScript([
+  'https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js',
+  'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js'
+], function() { leafletReady = true; tryRenderMap(); }, function() {
+  console.warn('Leaflet n\'a pas pu se charger depuis aucune CDN');
+});
+
+// Charger PapaParse
+loadScript([
+  'https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js',
+  'https://unpkg.com/papaparse@5.4.1/papaparse.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js'
+], function() { papaReady = true; if (typeof loadData === 'function') loadData(); }, function() {
+  console.warn('PapaParse non chargé, utilisation du parser de secours');
+  papaReady = true;
+  if (typeof loadData === 'function') loadData();
+});
+
+const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRpKD5N4jRIF-B4DpetLMtZDMJs7Ks2HOtI3jcEcm78f3u192_-gQHslK0KQLXYp2787NtipInOPuBx/pub?gid=1033568124&single=true&output=csv';
 const PRIX = { OK: 70, NOK: 100 };
 
 let allData = [];
 let map = null;
 let markers = [];
+let mapInitialized = false;
 
-// Parser CSV maison en cas d'absence de PapaParse
 function parseCsvFallback(text) {
   const lines = text.split(/\r?\n/).filter(l => l.length > 0);
   if (lines.length === 0) return { data: [] };
   const parseLine = (line) => {
     const result = [];
-    let cur = '';
-    let inQuotes = false;
+    let cur = '', inQuotes = false;
     for (let i = 0; i < line.length; i++) {
       const c = line[i];
       if (c === '"') {
         if (inQuotes && line[i+1] === '"') { cur += '"'; i++; }
         else inQuotes = !inQuotes;
-      } else if (c === ',' && !inQuotes) {
-        result.push(cur); cur = '';
-      } else cur += c;
+      } else if (c === ',' && !inQuotes) { result.push(cur); cur = ''; }
+      else cur += c;
     }
     result.push(cur);
     return result;
@@ -244,18 +340,15 @@ function parseCsvFallback(text) {
 }
 
 async function loadData() {
+  if (!papaReady) return;
   try {
     document.getElementById('tbody').innerHTML = '<tr><td colspan="9" class="empty"><span class="loader"></span> Chargement depuis Google Sheets...</td></tr>';
     const r = await fetch(SHEET_URL);
     if (!r.ok) throw new Error('HTTP ' + r.status);
     const text = await r.text();
-    let parsed;
-    if (typeof Papa !== 'undefined') {
-      parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
-    } else {
-      console.warn('PapaParse indisponible, utilisation du parser de secours');
-      parsed = parseCsvFallback(text);
-    }
+    const parsed = (typeof Papa !== 'undefined')
+      ? Papa.parse(text, { header: true, skipEmptyLines: true })
+      : parseCsvFallback(text);
     allData = parsed.data.map(row => ({
       codeFR: row['Code FR'] || '',
       nom: row['Nom du site'] || '',
@@ -268,13 +361,12 @@ async function loadData() {
       datePose: row['Date de pose'] || '',
       iloq: row['N° série Iloq'] || '',
       tech: row['Technicien'] || '',
-      pdfUrl: row['Lien PDF'] || '',
-      idKizeo: row['ID Rapport Kizeo'] || '',
-      cr: row['Compte-rendu'] || ''
+      pdfUrl: row['Lien PDF'] || ''
     })).filter(d => d.codeFR);
     document.getElementById('last-update').textContent = '🔄 Mis à jour : ' + new Date().toLocaleTimeString('fr-FR');
     populateRegionFilter();
     renderAll();
+    if (document.getElementById('tab-map').classList.contains('active')) tryRenderMap();
   } catch (e) {
     console.error(e);
     document.getElementById('tbody').innerHTML = `<tr><td colspan="9" class="empty">❌ Erreur : ${e.message}<br><small>Vérifier que le Sheet est bien publié sur le web.</small></td></tr>`;
@@ -283,14 +375,15 @@ async function loadData() {
 
 function populateRegionFilter() {
   const regions = [...new Set(allData.map(d => d.region).filter(Boolean))].sort();
-  const sel = document.getElementById('filter-region');
-  sel.innerHTML = '<option value="">Toutes régions</option>' + regions.map(r => `<option>${r}</option>`).join('');
+  const opts = '<option value="">Toutes régions</option>' + regions.map(r => `<option>${r}</option>`).join('');
+  document.getElementById('filter-region').innerHTML = opts;
+  document.getElementById('map-filter-region').innerHTML = opts;
 }
 
-function getFiltered() {
-  const q = document.getElementById('search').value.toLowerCase();
-  const s = document.getElementById('filter-status').value;
-  const r = document.getElementById('filter-region').value;
+function getFiltered(prefix) {
+  const q = (document.getElementById(prefix + 'search')?.value || '').toLowerCase();
+  const s = document.getElementById(prefix + 'filter-status').value;
+  const r = document.getElementById(prefix + 'filter-region').value;
   return allData.filter(d =>
     (!q || d.codeFR.toLowerCase().includes(q) || d.nom.toLowerCase().includes(q) ||
      d.ville.toLowerCase().includes(q) || d.iloq.toLowerCase().includes(q)) &&
@@ -305,7 +398,7 @@ function badge(s) {
 }
 
 function renderTable() {
-  const filtered = getFiltered();
+  const filtered = getFiltered('');
   const tbody = document.getElementById('tbody');
   if (filtered.length === 0) {
     tbody.innerHTML = '<tr><td colspan="9" class="empty">Aucun résultat</td></tr>';
@@ -313,16 +406,12 @@ function renderTable() {
     tbody.innerHTML = filtered.map(d => `
       <tr>
         <td><span class="code">${d.codeFR}</span></td>
-        <td>${d.nom}</td>
-        <td>${d.ville}</td>
-        <td>${d.region}</td>
+        <td>${d.nom}</td><td>${d.ville}</td><td>${d.region}</td>
         <td>${badge(d.statut)}</td>
         <td><span class="code">${d.iloq || '—'}</span></td>
-        <td>${d.datePose || '—'}</td>
-        <td>${d.tech || '—'}</td>
+        <td>${d.datePose || '—'}</td><td>${d.tech || '—'}</td>
         <td>${d.pdfUrl ? `<a href="${d.pdfUrl}" target="_blank" rel="noopener"><i class="ti ti-file-text"></i></a>` : '—'}</td>
-      </tr>
-    `).join('');
+      </tr>`).join('');
   }
   document.getElementById('row-count').textContent = `${filtered.length} site${filtered.length>1?'s':''} affiché${filtered.length>1?'s':''} sur ${allData.length}`;
 }
@@ -369,37 +458,108 @@ function renderRegions() {
   }).join('');
 }
 
-function renderMap() {
-  if (typeof L === 'undefined') {
-    document.getElementById('map').innerHTML = '<div class="empty">Carte indisponible (Leaflet n\'a pas pu se charger)</div>';
-    return;
+function popupHtml(d) {
+  const cls = d.statut === 'OK' ? 'ok' : d.statut === 'NOK' ? 'nok' : d.statut === 'Anomalie' ? 'ano' : 'raf';
+  const gmaps = `https://www.google.com/maps/dir/?api=1&destination=${d.lat},${d.lon}`;
+  return `
+    <h4>${d.codeFR}</h4>
+    <div><strong>${d.nom || ''}</strong></div>
+    ${d.adresse ? `<div style="font-size:12px;color:#6b7280">${d.adresse}</div>` : ''}
+    <div style="font-size:12px;color:#6b7280">${d.ville || ''} · ${d.region || ''}</div>
+    <div style="margin-top:6px"><span class="popup-status ${cls}">${d.statut}</span></div>
+    ${d.iloq ? `<div style="margin-top:6px;font-size:12px">N° Iloq : <span class="popup-iloq">${d.iloq}</span></div>` : ''}
+    ${d.datePose ? `<div style="font-size:12px;color:#6b7280">Posé le ${d.datePose}${d.tech ? ' · ' + d.tech : ''}</div>` : ''}
+    <div class="popup-actions">
+      <a href="${gmaps}" target="_blank" rel="noopener" class="popup-btn primary"><i class="ti ti-route"></i> Itinéraire</a>
+      ${d.pdfUrl ? `<a href="${d.pdfUrl}" target="_blank" rel="noopener" class="popup-btn"><i class="ti ti-file-text"></i> PDF</a>` : ''}
+    </div>
+  `;
+}
+
+function tryRenderMap() {
+  if (!leafletReady) return;
+  if (allData.length === 0) return;
+  if (!document.getElementById('tab-map').classList.contains('active')) return;
+
+  const mapEl = document.getElementById('map');
+
+  if (!mapInitialized) {
+    mapEl.innerHTML = '';
+    map = L.map('map', { zoomControl: true, preferCanvas: true }).setView([46.6, 2.5], 6);
+
+    const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap', maxZoom: 19
+    });
+    const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: '© Esri Satellite', maxZoom: 19
+    });
+    const lightLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© CartoDB', maxZoom: 19
+    });
+
+    osmLayer.addTo(map);
+    L.control.layers({
+      'Plan': osmLayer,
+      'Satellite': satelliteLayer,
+      'Clair': lightLayer
+    }, null, { position: 'topright', collapsed: false }).addTo(map);
+
+    // Légende flottante
+    const legend = L.control({ position: 'bottomright' });
+    legend.onAdd = function() {
+      const div = L.DomUtil.create('div', 'legend-floating');
+      div.innerHTML = `
+        <h5>Légende</h5>
+        <div class="item"><span class="dot" style="background:#1D9E75"></span>OK posé</div>
+        <div class="item"><span class="dot" style="background:#C53030"></span>NOK</div>
+        <div class="item"><span class="dot" style="background:#B7791F"></span>Anomalie</div>
+        <div class="item"><span class="dot" style="background:#9ca3af"></span>Reste à faire</div>
+      `;
+      return div;
+    };
+    legend.addTo(map);
+
+    mapInitialized = true;
   }
-  if (!map) {
-    map = L.map('map').setView([46.6, 2.5], 6);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap',
-      maxZoom: 18
-    }).addTo(map);
-  }
+
+  refreshMapMarkers();
+  setTimeout(() => map.invalidateSize(), 100);
+}
+
+function refreshMapMarkers() {
+  if (!map) return;
   markers.forEach(m => map.removeLayer(m));
   markers = [];
+
+  const filtered = getFiltered('map-');
   const colors = { OK: '#1D9E75', NOK: '#C53030', Anomalie: '#B7791F', RAF: '#9ca3af' };
-  allData.forEach(d => {
+
+  filtered.forEach(d => {
     if (!d.lat || !d.lon) return;
     const color = colors[d.statut] || colors.RAF;
-    const m = L.circleMarker([d.lat, d.lon], {
-      radius: 6, fillColor: color, color: 'white', weight: 1.5, opacity: 1, fillOpacity: 0.85
-    }).bindPopup(`
-      <strong>${d.codeFR}</strong><br>
-      ${d.nom}<br>
-      ${d.ville}<br>
-      Statut : ${badge(d.statut)}<br>
-      ${d.iloq ? `N° Iloq : <span class="code">${d.iloq}</span><br>` : ''}
-      ${d.datePose ? `Posé le ${d.datePose}<br>` : ''}
-      ${d.pdfUrl ? `<a href="${d.pdfUrl}" target="_blank">📄 Voir le rapport</a>` : ''}
-    `).addTo(map);
-    markers.push(m);
+    const marker = L.circleMarker([d.lat, d.lon], {
+      radius: 6,
+      fillColor: color,
+      color: 'white',
+      weight: 1.5,
+      opacity: 1,
+      fillOpacity: 0.92
+    });
+    marker.bindPopup(popupHtml(d), { maxWidth: 280 });
+    marker.addTo(map);
+    markers.push(marker);
   });
+
+  // Mettre à jour le compteur
+  const stats = { OK: 0, NOK: 0, Anomalie: 0, RAF: 0 };
+  filtered.forEach(d => {
+    if (stats[d.statut] !== undefined) stats[d.statut]++;
+  });
+  document.getElementById('m-ok').textContent = stats.OK;
+  document.getElementById('m-nok').textContent = stats.NOK;
+  document.getElementById('m-ano').textContent = stats.Anomalie;
+  document.getElementById('m-raf').textContent = stats.RAF;
+  document.getElementById('m-shown').textContent = filtered.length;
 }
 
 function renderFinance() {
@@ -426,7 +586,6 @@ function renderAll() {
   renderTable();
   renderRegions();
   renderFinance();
-  if (document.getElementById('tab-map').classList.contains('active')) renderMap();
 }
 
 function showTab(event, id) {
@@ -435,12 +594,12 @@ function showTab(event, id) {
   event.currentTarget.classList.add('active');
   document.getElementById(id).classList.add('active');
   if (id === 'tab-map') {
-    setTimeout(() => { renderMap(); map && map.invalidateSize(); }, 100);
+    setTimeout(tryRenderMap, 50);
   }
 }
 
 function exportCSV() {
-  const filtered = getFiltered();
+  const filtered = getFiltered('');
   const headers = ['Code FR', 'Nom site', 'Ville', 'Région', 'Statut', 'N° série Iloq', 'Date pose', 'Technicien', 'Lien PDF'];
   const rows = filtered.map(d => [d.codeFR, d.nom, d.ville, d.region, d.statut, d.iloq, d.datePose, d.tech, d.pdfUrl]);
   const csv = [headers, ...rows].map(r => r.map(c => `"${(c||'').toString().replace(/"/g,'""')}"`).join(';')).join('\n');
@@ -454,8 +613,12 @@ function exportCSV() {
 document.getElementById('search').addEventListener('input', renderTable);
 document.getElementById('filter-status').addEventListener('change', renderTable);
 document.getElementById('filter-region').addEventListener('change', renderTable);
+document.getElementById('map-search').addEventListener('input', refreshMapMarkers);
+document.getElementById('map-filter-status').addEventListener('change', refreshMapMarkers);
+document.getElementById('map-filter-region').addEventListener('change', refreshMapMarkers);
 
-loadData();
+// Démarrage
+if (papaReady) loadData();
 setInterval(loadData, 5 * 60 * 1000);
 </script>
 
