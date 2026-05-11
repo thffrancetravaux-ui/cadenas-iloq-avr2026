@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///C:/Users/y.hamouda/Downloads/index_16.html -->
+<!-- saved from url=(0050)file:///C:/Users/y.hamouda/Downloads/index_18.html -->
 <html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -223,12 +223,17 @@ a:hover { text-decoration: underline; }
     <div class="fin-card">
       <div class="fin-label">Budget total engagé</div>
       <div class="fin-value" id="fin-budget">—</div>
-      <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">601 × 70 €/pose nominale</div>
+      <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">601 × 100 €/pose nominale</div>
     </div>
     <div class="fin-card">
-      <div class="fin-label">Réalisé OK</div>
+      <div class="fin-label">Réalisé pose OK</div>
       <div class="fin-value" id="fin-ok" style="color:var(--green);">—</div>
       <div class="fin-bar"><div class="fin-bar-fill" id="fin-bar"></div></div>
+    </div>
+    <div class="fin-card">
+      <div class="fin-label">Consommables</div>
+      <div class="fin-value" id="fin-conso" style="color:var(--primary);">—</div>
+      <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">Cadenas + chaînes</div>
     </div>
     <div class="fin-card">
       <div class="fin-label">Coût NOK (déplacements)</div>
@@ -280,7 +285,14 @@ loadScript([
 });
 
 const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRpKD5N4jRIF-B4DpetLMtZDMJs7Ks2HOtI3jcEcm78f3u192_-gQHslK0KQLXYp2787NtipInOPuBx/pub?gid=1033568124&single=true&output=csv';
-const PRIX = { OK: 100, NOK: 70 };
+
+// === Tarification ===
+const PRIX = {
+  OK: 100,           // Pose OK (intervention complète + 1er cadenas Iloq inclus)
+  NOK: 70,           // Pose NOK (déplacement uniquement)
+  CADENAS_SUPP: 49.50,  // Cadenas à code supplémentaire
+  CHAINE: 45.84      // Chaîne posée
+};
 
 let allData = [];
 let map = null;
@@ -322,6 +334,13 @@ function parseNumber(s) {
   return isNaN(n) ? null : n;
 }
 
+// Détecte si la valeur indique "oui" / vrai
+function isYes(v) {
+  if (!v) return false;
+  const s = String(v).trim().toLowerCase();
+  return ['oui', 'yes', 'true', 'vrai', '1', 'x'].includes(s);
+}
+
 async function loadData() {
   if (!papaReady) return;
   try {
@@ -344,7 +363,9 @@ async function loadData() {
       datePose: row['Date de pose'] || '',
       iloq: row['N° série Iloq'] || '',
       tech: row['Technicien'] || '',
-      pdfUrl: row['Lien PDF'] || ''
+      pdfUrl: row['Lien PDF'] || '',
+      cadenasSupp: isYes(row['Cadenas suppl.']),
+      chaine: isYes(row['Chaîne'])
     })).filter(d => d.codeFR);
     document.getElementById('last-update').textContent = '🔄 Mis à jour : ' + new Date().toLocaleTimeString('fr-FR');
     populateRegionFilter();
@@ -414,9 +435,13 @@ function renderKPIs() {
   document.getElementById('kpi-ano').textContent = ano;
   document.getElementById('kpi-raf').textContent = raf;
   document.getElementById('kpi-raf-pct').textContent = pct(raf);
-  const eur = ok * PRIX.OK + nok * PRIX.NOK;
+
+  // Calcul total réalisé (pose + consommables - coût NOK)
+  const nbCadenas = allData.filter(d => d.cadenasSupp).length;
+  const nbChaines = allData.filter(d => d.chaine).length;
+  const totalRealise = ok * PRIX.OK + nok * PRIX.NOK + nbCadenas * PRIX.CADENAS_SUPP + nbChaines * PRIX.CHAINE;
   const budget = total * PRIX.OK;
-  document.getElementById('kpi-eur').textContent = eur.toLocaleString('fr-FR') + ' €';
+  document.getElementById('kpi-eur').textContent = totalRealise.toLocaleString('fr-FR', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' €';
   document.getElementById('kpi-eur-pct').textContent = budget ? '/ ' + budget.toLocaleString('fr-FR') + ' €' : '—';
 }
 
@@ -532,19 +557,34 @@ function refreshMapMarkers() {
 function renderFinance() {
   const ok = allData.filter(d => d.statut === 'OK').length;
   const nok = allData.filter(d => d.statut === 'NOK').length;
+  const nbCadenas = allData.filter(d => d.cadenasSupp).length;
+  const nbChaines = allData.filter(d => d.chaine).length;
   const total = allData.length;
+
   const budget = total * PRIX.OK;
   const okEur = ok * PRIX.OK;
   const nokEur = nok * PRIX.NOK;
-  const f = (n) => n.toLocaleString('fr-FR') + ' €';
-  document.getElementById('fin-budget').textContent = f(budget);
+  const cadenasEur = nbCadenas * PRIX.CADENAS_SUPP;
+  const chainesEur = nbChaines * PRIX.CHAINE;
+  const consoEur = cadenasEur + chainesEur;
+  const totalEur = okEur + nokEur + consoEur;
+
+  const f = (n) => n.toLocaleString('fr-FR', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' €';
+  const fEntier = (n) => n.toLocaleString('fr-FR') + ' €';
+
+  document.getElementById('fin-budget').textContent = fEntier(budget);
   document.getElementById('fin-ok').textContent = f(okEur);
   document.getElementById('fin-nok').textContent = f(nokEur);
-  document.getElementById('fin-total').textContent = f(okEur + nokEur);
+  document.getElementById('fin-conso').textContent = f(consoEur);
+  document.getElementById('fin-total').textContent = f(totalEur);
   document.getElementById('fin-bar').style.width = budget ? Math.round((okEur / budget) * 100) + '%' : '0%';
+
   document.getElementById('fin-detail').innerHTML = `
-    <tr><td>Pose OK</td><td>70 €</td><td>${ok}</td><td><strong>${f(okEur)}</strong></td></tr>
-    <tr><td>Pose NOK (déplacement)</td><td>100 €</td><td>${nok}</td><td><strong>${f(nokEur)}</strong></td></tr>
+    <tr><td>Pose OK</td><td>100,00 €</td><td>${ok}</td><td><strong>${f(okEur)}</strong></td></tr>
+    <tr><td>Pose NOK (déplacement)</td><td>70,00 €</td><td>${nok}</td><td><strong>${f(nokEur)}</strong></td></tr>
+    <tr><td>Cadenas supplémentaire</td><td>49,50 €</td><td>${nbCadenas}</td><td><strong>${f(cadenasEur)}</strong></td></tr>
+    <tr><td>Chaîne</td><td>45,84 €</td><td>${nbChaines}</td><td><strong>${f(chainesEur)}</strong></td></tr>
+    <tr style="background:var(--bg);"><td><strong>TOTAL</strong></td><td></td><td></td><td><strong>${f(totalEur)}</strong></td></tr>
   `;
 }
 
@@ -567,8 +607,8 @@ function showTab(event, id) {
 
 function exportCSV() {
   const filtered = getFiltered('');
-  const headers = ['Code FR', 'Nom site', 'Ville', 'Région', 'Statut', 'N° série Iloq', 'Date pose', 'Technicien', 'Lien PDF'];
-  const rows = filtered.map(d => [d.codeFR, d.nom, d.ville, d.region, d.statut, d.iloq, d.datePose, d.tech, d.pdfUrl]);
+  const headers = ['Code FR', 'Nom site', 'Ville', 'Région', 'Statut', 'N° série Iloq', 'Date pose', 'Technicien', 'Cadenas suppl.', 'Chaîne', 'Lien PDF'];
+  const rows = filtered.map(d => [d.codeFR, d.nom, d.ville, d.region, d.statut, d.iloq, d.datePose, d.tech, d.cadenasSupp ? 'Oui' : '', d.chaine ? 'Oui' : '', d.pdfUrl]);
   const csv = [headers, ...rows].map(r => r.map(c => `"${(c||'').toString().replace(/"/g,'""')}"`).join(';')).join('\n');
   const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' });
   const a = document.createElement('a');
