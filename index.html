@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///C:/Users/y.hamouda/Downloads/index_19.html -->
+<!-- saved from url=(0050)file:///C:/Users/y.hamouda/Downloads/index_20.html -->
 <html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,19 +9,19 @@
 
 <style>
 :root {
-  --bg: #f7f8fa;
+  --bg: #f8f9fb;
   --surface: #ffffff;
-  --surface-hover: #fafbfc;
+  --surface-hover: #f5f7fa;
   --border: #e8eaed;
   --border-strong: #d2d5d9;
-  --text: #1a1d23;
+  --text: #0f1419;
   --text-secondary: #4a5160;
   --text-muted: #8b919b;
   --primary: #1F4E79;
+  --primary-dark: #163d61;
   --primary-light: #E8F0F9;
   --green: #1D9E75;
   --green-light: #EAF6F1;
-  --green-bg: #d4f0e3;
   --red: #C53030;
   --red-light: #FCEBEB;
   --amber: #B7791F;
@@ -29,58 +29,40 @@
   --gray: #6b7280;
   --gray-light: #F1EFE8;
   --thf-green: #97C459;
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
-  --shadow-lg: 0 10px 30px rgba(31,78,121,0.12);
+  --shadow-sm: 0 1px 3px rgba(15,20,25,0.04), 0 1px 2px rgba(15,20,25,0.06);
+  --shadow-md: 0 4px 12px rgba(15,20,25,0.06), 0 2px 4px rgba(15,20,25,0.04);
+  --shadow-lg: 0 12px 28px rgba(31,78,121,0.12), 0 4px 8px rgba(15,20,25,0.04);
   --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --radius: 12px;
+  --radius-lg: 14px;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", system-ui, Arial, sans-serif;
   background: var(--bg);
   color: var(--text);
   font-size: 14px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  font-feature-settings: "cv11", "ss01", "ss03";
   background-image:
-    radial-gradient(at 20% 0%, rgba(31,78,121,0.04) 0px, transparent 50%),
-    radial-gradient(at 80% 0%, rgba(151,196,89,0.03) 0px, transparent 50%);
+    radial-gradient(at 15% 0%, rgba(31,78,121,0.04) 0px, transparent 50%),
+    radial-gradient(at 85% 0%, rgba(151,196,89,0.025) 0px, transparent 50%);
   min-height: 100vh;
 }
 
 .app {
-  max-width: 1400px;
+  max-width: 1440px;
   margin: 0 auto;
   padding: 28px 24px;
   animation: fadeInUp 0.5s ease-out;
 }
 
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes slideIn {
-  from { opacity: 0; transform: translateX(-8px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
-@keyframes countUp {
-  from { transform: translateY(8px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideIn { from { opacity: 0; transform: translateX(-8px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
 header {
   display: flex;
@@ -89,64 +71,77 @@ header {
   margin-bottom: 24px;
   flex-wrap: wrap;
   gap: 16px;
-  padding-bottom: 16px;
+  padding-bottom: 18px;
   border-bottom: 1px solid var(--border);
 }
 
 .header-left {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 18px;
 }
 
-.logo {
-  height: 56px;
+/* === Logo SVG THF === */
+.logo-svg {
+  height: 52px;
   width: auto;
-  object-fit: contain;
+  flex-shrink: 0;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.06));
   transition: var(--transition);
 }
 
-.logo:hover {
-  transform: scale(1.03);
-}
+.logo-svg:hover { transform: scale(1.03); }
 
 .header-info h1 {
   font-size: 22px;
   font-weight: 700;
-  color: var(--primary);
-  letter-spacing: -0.5px;
+  color: var(--text);
+  letter-spacing: -0.6px;
   margin: 0;
+  line-height: 1.2;
 }
 
 .header-info .subtitle {
   font-size: 13px;
   color: var(--text-muted);
-  margin-top: 4px;
+  margin-top: 5px;
   font-weight: 400;
+}
+
+.header-info .subtitle span { color: var(--text-secondary); font-weight: 500; }
+
+.header-right {
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
 
 .last-update {
   font-size: 12px;
-  color: var(--text-muted);
+  color: var(--green);
+  background: var(--green-light);
+  padding: 6px 12px;
+  border-radius: 20px;
   display: flex;
   align-items: center;
   gap: 6px;
+  font-weight: 600;
 }
 
 .last-update::before {
   content: '';
   width: 8px;
   height: 8px;
-  background: var(--thf-green);
+  background: var(--green);
   border-radius: 50%;
   animation: pulse 2s ease-in-out infinite;
 }
 
 .btn {
-  padding: 9px 16px;
+  padding: 10px 16px;
   border: 1px solid var(--border);
   background: var(--surface);
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
   font-size: 13px;
   color: var(--text);
@@ -155,41 +150,49 @@ header {
   gap: 8px;
   transition: var(--transition);
   font-weight: 500;
+  font-family: inherit;
 }
 
-.btn:hover {
-  background: var(--surface-hover);
-  border-color: var(--border-strong);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-sm);
+.btn:hover { background: var(--surface-hover); border-color: var(--border-strong); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+.btn:active { transform: translateY(0); }
+
+.btn-primary { background: var(--primary); color: white; border-color: var(--primary); }
+.btn-primary:hover { background: var(--primary-dark); box-shadow: var(--shadow-md); }
+
+/* === Section title === */
+.section-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.btn-primary {
-  background: var(--primary);
-  color: white;
-  border-color: var(--primary);
+.section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
 }
 
-.btn-primary:hover {
-  background: #163d61;
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-1px);
-}
-
+/* === KPI Cards === */
 .kpis {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-  gap: 14px;
-  margin-bottom: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
 }
 
 .kpi {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius);
   padding: 18px 20px;
   position: relative;
-  overflow: hidden;
   transition: var(--transition);
   animation: fadeInUp 0.4s ease-out both;
 }
@@ -204,42 +207,46 @@ header {
 .kpi:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
+  border-color: var(--border-strong);
 }
 
-.kpi::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
+.kpi-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.kpi-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
   background: var(--gray);
-  opacity: 0.6;
+  flex-shrink: 0;
 }
 
-.kpi.ok::before { background: linear-gradient(90deg, var(--green), var(--thf-green)); }
-.kpi.nok::before { background: linear-gradient(90deg, var(--red), #e85555); }
-.kpi.ano::before { background: linear-gradient(90deg, var(--amber), #d99933); }
-.kpi.eur::before { background: linear-gradient(90deg, var(--primary), #3a6da3); }
+.kpi.ok .kpi-dot { background: var(--green); }
+.kpi.nok .kpi-dot { background: var(--red); }
+.kpi.ano .kpi-dot { background: var(--amber); }
+.kpi.eur .kpi-dot { background: var(--primary); }
 
 .kpi-label {
-  font-size: 12px;
-  color: var(--text-muted);
-  margin-bottom: 6px;
+  font-size: 13px;
+  color: var(--text-secondary);
   font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .kpi-value {
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 700;
-  letter-spacing: -0.5px;
-  line-height: 1.1;
+  color: var(--text);
+  letter-spacing: -1.2px;
+  line-height: 1;
+  font-feature-settings: "tnum";
 }
 
 .kpi-sub {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--text-muted);
   margin-top: 6px;
   font-weight: 500;
@@ -249,17 +256,30 @@ header {
 .kpi.nok .kpi-value { color: var(--red); }
 .kpi.ano .kpi-value { color: var(--amber); }
 
-/* === Bandeau stats temps réel === */
+/* === Bandeau Stats Temps Réel === */
 .live-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 12px;
-  margin-bottom: 24px;
-  background: linear-gradient(135deg, var(--primary), #2c5f8d);
-  border-radius: 14px;
-  padding: 18px 20px;
+  gap: 0;
+  margin-bottom: 28px;
+  background: linear-gradient(135deg, #1F4E79 0%, #142E48 100%);
+  border-radius: var(--radius-lg);
+  padding: 24px 28px;
   box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
   animation: fadeInUp 0.5s ease-out 0.3s both;
+}
+
+.live-stats::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(151,196,89,0.08) 0%, transparent 70%);
+  pointer-events: none;
 }
 
 .live-stat {
@@ -267,39 +287,47 @@ header {
   align-items: center;
   gap: 14px;
   color: white;
+  padding: 4px 18px;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  position: relative;
+  z-index: 1;
 }
 
+.live-stat:first-child { padding-left: 0; }
+.live-stat:last-child { border-right: none; padding-right: 0; }
+
 .live-stat-icon {
-  width: 44px;
-  height: 44px;
-  background: rgba(255,255,255,0.15);
-  border-radius: 10px;
+  width: 46px;
+  height: 46px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
-  backdrop-filter: blur(8px);
   flex-shrink: 0;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.1);
 }
 
-.live-stat-content {
-  flex: 1;
-  min-width: 0;
-}
+.live-stat-icon svg { width: 22px; height: 22px; color: white; }
+
+.live-stat-content { flex: 1; min-width: 0; }
 
 .live-stat-label {
   font-size: 11px;
-  color: rgba(255,255,255,0.7);
+  color: rgba(255,255,255,0.6);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-weight: 500;
+  letter-spacing: 0.6px;
+  font-weight: 600;
 }
 
 .live-stat-value {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
   color: white;
-  margin-top: 2px;
+  margin-top: 4px;
+  letter-spacing: -0.5px;
+  line-height: 1.1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -307,44 +335,48 @@ header {
 
 .live-stat-sub {
   font-size: 11px;
-  color: rgba(255,255,255,0.6);
+  color: rgba(255,255,255,0.5);
   margin-top: 2px;
 }
 
+/* === Tabs === */
 .tabs {
   display: flex;
   gap: 4px;
-  border-bottom: 2px solid var(--border);
   margin-bottom: 20px;
-  position: relative;
   overflow-x: auto;
+  background: var(--surface);
+  padding: 6px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  width: fit-content;
 }
 
 .tab {
-  padding: 12px 18px;
+  padding: 9px 16px;
   cursor: pointer;
-  font-size: 14px;
-  color: var(--text-muted);
-  border-bottom: 2px solid transparent;
-  margin-bottom: -2px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  border-radius: 8px;
   transition: var(--transition);
-  position: relative;
   font-weight: 500;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   white-space: nowrap;
+  border: none;
+  background: transparent;
+  font-family: inherit;
 }
 
 .tab:hover {
-  color: var(--text-secondary);
-  background: var(--surface-hover);
-  border-radius: 6px 6px 0 0;
+  color: var(--text);
+  background: var(--bg);
 }
 
 .tab.active {
   color: var(--primary);
-  border-bottom-color: var(--primary);
+  background: var(--primary-light);
   font-weight: 600;
 }
 
@@ -352,7 +384,7 @@ header {
   display: none;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-lg);
   padding: 24px;
   box-shadow: var(--shadow-sm);
   animation: fadeInUp 0.3s ease-out;
@@ -361,49 +393,92 @@ header {
 .section.active { display: block; }
 .section.no-padding { padding: 0; overflow: hidden; }
 
-.toolbar {
+/* === Tableau filtres pilules === */
+.filters-bar {
   display: flex;
-  gap: 10px;
-  margin-bottom: 18px;
   flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 20px;
+  align-items: center;
 }
 
-.toolbar input,
-.toolbar select {
-  padding: 9px 12px;
+.search-input {
+  flex: 1;
+  min-width: 280px;
+  padding: 10px 14px 10px 38px;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 13px;
-  background: var(--surface);
-  transition: var(--transition);
+  background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238b919b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'%3E%3C/circle%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'%3E%3C/line%3E%3C/svg%3E") no-repeat 12px center;
   font-family: inherit;
   color: var(--text);
+  transition: var(--transition);
 }
 
-.toolbar input { flex: 1; min-width: 240px; }
-
-.toolbar input:focus,
-.toolbar select:focus {
+.search-input:focus {
   outline: none;
   border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(31,78,121,0.1);
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
+.pills-group {
+  display: flex;
+  gap: 4px;
+  background: var(--bg);
+  padding: 4px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
 }
+
+.pill {
+  padding: 7px 12px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.pill:hover { color: var(--text); background: rgba(255,255,255,0.6); }
+
+.pill.active {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-sm);
+  font-weight: 600;
+}
+
+.pill .count {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.pill.active .count {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* === Tableau === */
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
 
 th {
   text-align: left;
-  padding: 12px 10px;
+  padding: 12px 14px;
   font-weight: 600;
   color: var(--text-muted);
-  font-size: 11px;
+  font-size: 10px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border-bottom: 2px solid var(--border);
+  letter-spacing: 0.6px;
+  border-bottom: 1px solid var(--border);
   white-space: nowrap;
   position: sticky;
   top: 0;
@@ -412,16 +487,17 @@ th {
 }
 
 td {
-  padding: 12px 10px;
+  padding: 14px;
   border-bottom: 1px solid var(--border);
+  vertical-align: middle;
 }
 
-tr:hover td {
-  background: var(--surface-hover);
-}
+tr { transition: var(--transition); }
+tr:hover td { background: var(--surface-hover); }
+tr:last-child td { border-bottom: none; }
 
 .table-wrap {
-  max-height: 600px;
+  max-height: 640px;
   overflow: auto;
   border: 1px solid var(--border);
   border-radius: 10px;
@@ -431,21 +507,40 @@ tr:hover td {
 .table-wrap::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
 
 .code {
-  font-family: "SF Mono", Monaco, Consolas, monospace;
-  font-size: 12px;
+  font-family: "SF Mono", Monaco, "JetBrains Mono", Consolas, monospace;
+  font-size: 12.5px;
   color: var(--primary);
   font-weight: 500;
+  background: var(--primary-light);
+  padding: 2px 8px;
+  border-radius: 6px;
+  display: inline-block;
 }
 
+.iloq-code {
+  font-family: "SF Mono", Monaco, Consolas, monospace;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.site-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.site-name { font-weight: 500; color: var(--text); }
+.site-meta { font-size: 11px; color: var(--text-muted); }
+
+/* === Badges === */
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
   padding: 4px 10px;
-  border-radius: 12px;
+  border-radius: 14px;
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.2px;
 }
 
 .badge::before {
@@ -458,76 +553,144 @@ tr:hover td {
 
 .b-ok { background: var(--green-light); color: #1a7d59; }
 .b-nok { background: var(--red-light); color: #791F1F; }
-.b-raf { background: var(--gray-light); color: #444441; }
+.b-raf { background: var(--gray-light); color: #5a5a55; }
 .b-ano { background: var(--amber-light); color: #854F0B; }
 
+.region-tag {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--bg);
+  color: var(--text-secondary);
+}
+
+/* === Avatar tech === */
+.tech-avatar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: white;
+  flex-shrink: 0;
+  letter-spacing: 0.3px;
+}
+
+.avatar.c1 { background: linear-gradient(135deg, #1F4E79, #2c5f8d); }
+.avatar.c2 { background: linear-gradient(135deg, #1D9E75, #34c595); }
+.avatar.c3 { background: linear-gradient(135deg, #B7791F, #d99933); }
+.avatar.c4 { background: linear-gradient(135deg, #7c3aed, #a78bfa); }
+.avatar.c5 { background: linear-gradient(135deg, #db2777, #f472b6); }
+.avatar.c6 { background: linear-gradient(135deg, #0891b2, #22d3ee); }
+.avatar.c7 { background: linear-gradient(135deg, #ea580c, #fb923c); }
+
+/* === Bouton PDF === */
+.pdf-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--primary);
+  font-size: 11px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: var(--transition);
+  border: 1px solid var(--border);
+}
+
+.pdf-btn:hover {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+  text-decoration: none;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.pdf-btn svg { width: 12px; height: 12px; }
+
+/* === Régions === */
 .region-list .row {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 14px 0;
+  padding: 16px 8px;
   border-bottom: 1px solid var(--border);
   transition: var(--transition);
+  border-radius: 8px;
 }
 
 .region-list .row:last-child { border-bottom: none; }
-.region-list .row:hover { background: var(--surface-hover); padding-left: 8px; border-radius: 8px; }
+.region-list .row:hover { background: var(--bg); }
 
-.region-name { width: 80px; font-weight: 600; color: var(--text); }
+.region-name {
+  width: 80px;
+  font-weight: 600;
+  color: var(--text);
+  font-size: 13px;
+}
 
 .region-bar {
   flex: 1;
-  height: 12px;
+  height: 10px;
   background: var(--bg);
-  border-radius: 6px;
+  border-radius: 5px;
   overflow: hidden;
+  border: 1px solid var(--border);
 }
 
 .region-fill {
   height: 100%;
   background: linear-gradient(90deg, var(--green), var(--thf-green));
-  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 5px;
 }
 
-.region-stat { font-size: 13px; color: var(--text-secondary); min-width: 140px; text-align: right; font-weight: 500; }
+.region-stat { font-size: 13px; color: var(--text-secondary); min-width: 150px; text-align: right; font-weight: 500; }
 
+/* === Carte === */
 .map-toolbar {
   display: flex;
-  gap: 10px;
-  padding: 16px 20px;
+  gap: 14px;
+  padding: 18px 24px;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
   flex-wrap: wrap;
   align-items: center;
 }
 
-.map-toolbar input, .map-toolbar select {
-  padding: 9px 12px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  font-size: 13px;
-  background: var(--surface);
-  font-family: inherit;
-}
-
-.map-toolbar input { flex: 1; min-width: 240px; }
+.map-toolbar .search-input { min-width: 240px; }
 
 .map-stats {
   display: flex;
-  gap: 14px;
+  gap: 8px;
   font-size: 12px;
-  color: var(--text-secondary);
   margin-left: auto;
-  font-weight: 500;
+  flex-wrap: wrap;
 }
 
 .map-stats .stat {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 4px 8px;
+  padding: 5px 10px;
   background: var(--bg);
-  border-radius: 6px;
+  border-radius: 8px;
+  font-weight: 500;
+  color: var(--text-secondary);
 }
 
 .map-stats .dot { width: 8px; height: 8px; border-radius: 50%; }
@@ -537,7 +700,7 @@ tr:hover td {
 .map-loading { text-align: center; padding: 80px; color: var(--text-muted); }
 
 .leaflet-popup-content { font-size: 13px; line-height: 1.5; min-width: 220px; }
-.leaflet-popup-content h4 { font-size: 13px; color: var(--primary); margin-bottom: 6px; font-family: monospace; font-weight: 600; }
+.leaflet-popup-content h4 { font-size: 13px; color: var(--primary); margin-bottom: 8px; font-family: monospace; font-weight: 600; }
 
 .popup-status {
   display: inline-flex;
@@ -554,23 +717,21 @@ tr:hover td {
 .popup-status.ok { background: var(--green-light); color: #1a7d59; }
 .popup-status.nok { background: var(--red-light); color: #791F1F; }
 .popup-status.ano { background: var(--amber-light); color: #854F0B; }
-.popup-status.raf { background: var(--gray-light); color: #444441; }
+.popup-status.raf { background: var(--gray-light); color: #5a5a55; }
 
 .popup-iloq { font-family: monospace; background: var(--primary-light); padding: 2px 8px; border-radius: 4px; font-size: 12px; color: var(--primary); font-weight: 500; }
-
 .popup-actions { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border); display: flex; gap: 6px; flex-wrap: wrap; }
-
 .popup-btn { padding: 5px 12px; border-radius: 6px; font-size: 11px; text-decoration: none; border: 1px solid var(--border); background: var(--surface); color: var(--text); display: inline-flex; align-items: center; gap: 4px; font-weight: 500; }
-.popup-btn:hover { background: var(--surface-hover); transform: translateY(-1px); }
+.popup-btn:hover { background: var(--bg); transform: translateY(-1px); }
 .popup-btn.primary { background: var(--primary); color: white; border-color: var(--primary); }
-.popup-btn.primary:hover { background: #163d61; }
+.popup-btn.primary:hover { background: var(--primary-dark); }
 
 .legend-floating { background: var(--surface); padding: 12px 14px; border-radius: 10px; box-shadow: var(--shadow-lg); font-size: 11px; line-height: 1.8; border: 1px solid var(--border); }
 .legend-floating h5 { font-size: 10px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; letter-spacing: 0.5px; font-weight: 700; }
 .legend-floating .item { display: flex; align-items: center; gap: 8px; }
 .legend-floating .dot { width: 10px; height: 10px; border-radius: 50%; }
 
-/* === Onglet Analytics === */
+/* === Analytics === */
 .analytics-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -578,84 +739,26 @@ tr:hover td {
   margin-bottom: 20px;
 }
 
-.analytics-grid.three-col {
-  grid-template-columns: 1fr;
-}
-
 .chart-card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 20px;
+  border-radius: var(--radius);
+  padding: 22px;
   transition: var(--transition);
 }
 
-.chart-card:hover {
-  box-shadow: var(--shadow-md);
-}
+.chart-card:hover { box-shadow: var(--shadow-md); }
 
-.chart-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text);
-  margin-bottom: 4px;
-}
-
-.chart-subtitle {
-  font-size: 12px;
-  color: var(--text-muted);
-  margin-bottom: 16px;
-}
-
-.chart-container {
-  position: relative;
-  height: 260px;
-  width: 100%;
-}
-
-.heatmap-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(36px, 1fr));
-  gap: 4px;
-  margin-top: 12px;
-}
+.chart-title { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.chart-subtitle { font-size: 12px; color: var(--text-muted); margin-bottom: 18px; }
+.chart-container { position: relative; height: 280px; width: 100%; }
 
 .heatmap-cell {
-  aspect-ratio: 1;
-  border-radius: 4px;
-  background: var(--bg);
-  position: relative;
-  cursor: default;
+  border-radius: 3px;
   transition: var(--transition);
 }
 
-.heatmap-cell:hover {
-  transform: scale(1.15);
-  z-index: 2;
-}
-
-.heatmap-cell[data-count]:not([data-count="0"]) {
-  color: white;
-}
-
-.heatmap-cell .tooltip {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--text);
-  color: white;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 11px;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: var(--transition);
-  margin-bottom: 4px;
-}
-
-.heatmap-cell:hover .tooltip { opacity: 1; }
+.heatmap-cell:hover { transform: scale(1.3); z-index: 2; }
 
 .heatmap-legend {
   display: flex;
@@ -663,74 +766,52 @@ tr:hover td {
   gap: 8px;
   font-size: 11px;
   color: var(--text-muted);
-  margin-top: 12px;
+  margin-top: 14px;
   justify-content: flex-end;
 }
 
-.heatmap-scale {
-  display: flex;
-  gap: 2px;
-}
+.heatmap-scale { display: flex; gap: 2px; }
+.heatmap-scale span { width: 14px; height: 14px; border-radius: 3px; }
 
-.heatmap-scale span {
-  width: 14px;
-  height: 14px;
-  border-radius: 3px;
-}
-
+/* === Finance === */
 .fin-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
+  gap: 14px;
   margin-bottom: 24px;
 }
 
 .fin-card {
   background: var(--bg);
-  border-radius: 12px;
-  padding: 18px 20px;
+  border-radius: var(--radius);
+  padding: 20px;
   transition: var(--transition);
   border: 1px solid transparent;
 }
 
-.fin-card:hover {
-  background: var(--surface);
-  border-color: var(--border);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
+.fin-card:hover { background: var(--surface); border-color: var(--border); transform: translateY(-2px); box-shadow: var(--shadow-md); }
 
-.fin-label { font-size: 12px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
-.fin-value { font-size: 26px; font-weight: 700; margin-top: 8px; letter-spacing: -0.5px; }
-
-.fin-bar { height: 8px; background: var(--surface); border-radius: 4px; margin-top: 12px; overflow: hidden; }
-.fin-bar-fill { height: 100%; background: linear-gradient(90deg, var(--primary), #3a6da3); transition: width 0.8s; border-radius: 4px; }
+.fin-label { font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.fin-value { font-size: 26px; font-weight: 700; margin-top: 8px; letter-spacing: -0.6px; font-feature-settings: "tnum"; }
+.fin-bar { height: 6px; background: var(--surface); border-radius: 3px; margin-top: 12px; overflow: hidden; }
+.fin-bar-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--thf-green)); transition: width 0.8s; border-radius: 3px; }
 
 .empty { padding: 60px; text-align: center; color: var(--text-muted); }
-
 .loader { display: inline-block; width: 16px; height: 16px; border: 2px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-a { color: var(--primary); text-decoration: none; }
-a:hover { text-decoration: underline; }
+#row-count { margin-top: 14px; font-size: 12px; color: var(--text-muted); font-weight: 500; }
+#row-count strong { color: var(--primary); font-weight: 700; }
 
-.pdf-link { font-size: 16px; text-decoration: none; transition: var(--transition); display: inline-block; }
-.pdf-link:hover { transform: scale(1.2) rotate(-3deg); }
-
-#row-count { margin-top: 12px; font-size: 12px; color: var(--text-muted); font-weight: 500; }
-#row-count strong { color: var(--primary); font-weight: 600; }
-
-@media (max-width: 900px) {
-  .analytics-grid { grid-template-columns: 1fr; }
-}
-
+@media (max-width: 1000px) { .analytics-grid { grid-template-columns: 1fr; } }
 @media (max-width: 768px) {
   .app { padding: 16px; }
-  .logo { height: 44px; }
+  .logo-svg { height: 40px; }
   .header-info h1 { font-size: 18px; }
-  .kpi-value { font-size: 22px; }
+  .kpi-value { font-size: 24px; }
   #map { height: 500px; }
   .map-stats { display: none; }
+  .live-stat { border-right: none; padding: 8px 0; }
 }
 </style>
 <script src="./index_files/leaflet.js.télécharger"></script><script src="./index_files/papaparse.min.js.télécharger"></script><script src="./index_files/chart.umd.min.js.télécharger"></script></head>
@@ -739,31 +820,47 @@ a:hover { text-decoration: underline; }
 
 <header>
   <div class="header-left">
-    <img class="logo" src="file:///C:/Users/y.hamouda/Downloads/logo-thf.png" alt="THF — Études Sécurité" onerror="this.style.display=&#39;none&#39;" style="display: none;">
+    <svg class="logo-svg" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+      <text x="0" y="48" font-family="Arial Black, Arial, sans-serif" font-size="52" font-weight="900" fill="#1F4E79" letter-spacing="-2">THF</text>
+      <g transform="translate(135, 8)">
+        <circle cx="22" cy="22" r="20" fill="none" stroke="#97C459" stroke-width="3"></circle>
+        <circle cx="22" cy="22" r="14" fill="none" stroke="#97C459" stroke-width="3"></circle>
+        <circle cx="22" cy="22" r="8" fill="none" stroke="#97C459" stroke-width="3"></circle>
+        <g transform="translate(13, 18)">
+          <rect x="0" y="6" width="6" height="14" rx="3" fill="#1F4E79"></rect>
+          <rect x="6" y="2" width="6" height="18" rx="3" fill="#1F4E79"></rect>
+          <rect x="12" y="0" width="6" height="20" rx="3" fill="#1F4E79"></rect>
+          <circle cx="15" cy="-4" r="3" fill="#97C459"></circle>
+        </g>
+      </g>
+    </svg>
     <div class="header-info">
-      <h1>Suivi Iloq — Lot Avril 2026</h1>
-      <div class="subtitle">THF / Cellnex · Campagne PROG 2026 · 601 sites</div>
+      <h1>Suivi Iloq <span style="color: var(--text-muted); font-weight: 500;">— Lot Avril 2026</span></h1>
+      <div class="subtitle"><span>THF / Cellnex</span> · Campagne PROG 2026 · 601 sites</div>
     </div>
   </div>
-  <div style="display:flex; gap:10px; align-items:center;">
+  <div class="header-right">
     <span class="last-update" id="last-update">Connexion...</span>
     <button class="btn" onclick="loadData()">🔄 Actualiser</button>
     <button class="btn btn-primary" onclick="exportCSV()">⬇️ Export CSV</button>
   </div>
 </header>
 
+<div class="section-title">Indicateurs clés</div>
 <div class="kpis">
-  <div class="kpi"><div class="kpi-label">Total sites</div><div class="kpi-value" id="kpi-total">—</div><div class="kpi-sub">PROG 2026</div></div>
-  <div class="kpi ok"><div class="kpi-label">Posés OK</div><div class="kpi-value" id="kpi-ok">—</div><div class="kpi-sub" id="kpi-ok-pct">—</div></div>
-  <div class="kpi nok"><div class="kpi-label">NOK</div><div class="kpi-value" id="kpi-nok">—</div><div class="kpi-sub" id="kpi-nok-pct">—</div></div>
-  <div class="kpi ano"><div class="kpi-label">Anomalies</div><div class="kpi-value" id="kpi-ano">—</div><div class="kpi-sub">À vérifier</div></div>
-  <div class="kpi"><div class="kpi-label">Reste à faire</div><div class="kpi-value" id="kpi-raf">—</div><div class="kpi-sub" id="kpi-raf-pct">—</div></div>
-  <div class="kpi eur"><div class="kpi-label">Réalisé</div><div class="kpi-value" id="kpi-eur">—</div><div class="kpi-sub" id="kpi-eur-pct">—</div></div>
+  <div class="kpi"><div class="kpi-header"><span class="kpi-dot"></span><span class="kpi-label">Total sites</span></div><div class="kpi-value" id="kpi-total">—</div><div class="kpi-sub">PROG 2026</div></div>
+  <div class="kpi ok"><div class="kpi-header"><span class="kpi-dot"></span><span class="kpi-label">Posés OK</span></div><div class="kpi-value" id="kpi-ok">—</div><div class="kpi-sub" id="kpi-ok-pct">—</div></div>
+  <div class="kpi nok"><div class="kpi-header"><span class="kpi-dot"></span><span class="kpi-label">NOK</span></div><div class="kpi-value" id="kpi-nok">—</div><div class="kpi-sub" id="kpi-nok-pct">—</div></div>
+  <div class="kpi ano"><div class="kpi-header"><span class="kpi-dot"></span><span class="kpi-label">Anomalies</span></div><div class="kpi-value" id="kpi-ano">—</div><div class="kpi-sub">À vérifier</div></div>
+  <div class="kpi"><div class="kpi-header"><span class="kpi-dot"></span><span class="kpi-label">Reste à faire</span></div><div class="kpi-value" id="kpi-raf">—</div><div class="kpi-sub" id="kpi-raf-pct">—</div></div>
+  <div class="kpi eur"><div class="kpi-header"><span class="kpi-dot"></span><span class="kpi-label">Réalisé</span></div><div class="kpi-value" id="kpi-eur">—</div><div class="kpi-sub" id="kpi-eur-pct">—</div></div>
 </div>
 
 <div class="live-stats">
   <div class="live-stat">
-    <div class="live-stat-icon">⚡</div>
+    <div class="live-stat-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+    </div>
     <div class="live-stat-content">
       <div class="live-stat-label">Taux moyen</div>
       <div class="live-stat-value" id="live-rate">—</div>
@@ -771,7 +868,9 @@ a:hover { text-decoration: underline; }
     </div>
   </div>
   <div class="live-stat">
-    <div class="live-stat-icon">🎯</div>
+    <div class="live-stat-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+    </div>
     <div class="live-stat-content">
       <div class="live-stat-label">Fin de campagne prévue</div>
       <div class="live-stat-value" id="live-end-date">—</div>
@@ -779,7 +878,9 @@ a:hover { text-decoration: underline; }
     </div>
   </div>
   <div class="live-stat">
-    <div class="live-stat-icon">📅</div>
+    <div class="live-stat-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+    </div>
     <div class="live-stat-content">
       <div class="live-stat-label">Aujourd'hui</div>
       <div class="live-stat-value" id="live-today">—</div>
@@ -787,7 +888,9 @@ a:hover { text-decoration: underline; }
     </div>
   </div>
   <div class="live-stat">
-    <div class="live-stat-icon">📊</div>
+    <div class="live-stat-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+    </div>
     <div class="live-stat-content">
       <div class="live-stat-label">Cette semaine</div>
       <div class="live-stat-value" id="live-week">—</div>
@@ -797,20 +900,26 @@ a:hover { text-decoration: underline; }
 </div>
 
 <div class="tabs">
-  <div class="tab active" onclick="showTab(event, &#39;tab-table&#39;)">📋 Tableau</div>
-  <div class="tab" onclick="showTab(event, &#39;tab-regions&#39;)">📊 Par région</div>
-  <div class="tab" onclick="showTab(event, &#39;tab-map&#39;)">🗺️ Carte</div>
-  <div class="tab" onclick="showTab(event, &#39;tab-analytics&#39;)">📈 Analytics</div>
-  <div class="tab" onclick="showTab(event, &#39;tab-finance&#39;)">💶 Financier</div>
+  <button class="tab active" onclick="showTab(event, &#39;tab-table&#39;)">📋 Tableau</button>
+  <button class="tab" onclick="showTab(event, &#39;tab-regions&#39;)">📊 Par région</button>
+  <button class="tab" onclick="showTab(event, &#39;tab-map&#39;)">🗺️ Carte</button>
+  <button class="tab" onclick="showTab(event, &#39;tab-analytics&#39;)">📈 Analytics</button>
+  <button class="tab" onclick="showTab(event, &#39;tab-finance&#39;)">💶 Financier</button>
 </div>
 
 <div id="tab-table" class="section active">
-  <div class="toolbar">
-    <input type="text" id="search" placeholder="🔍 Recherche : Code FR, nom site, ville, N° série Iloq...">
-    <select id="filter-status">
-      <option value="">Tous statuts</option><option value="OK">OK</option><option value="NOK">NOK</option><option value="Anomalie">Anomalie</option><option value="RAF">RAF</option>
-    </select>
-    <select id="filter-region"><option value="">Toutes régions</option></select>
+  <div class="filters-bar">
+    <input type="text" id="search" class="search-input" placeholder="Rechercher un code FR, site, ville, n° série...">
+    <div class="pills-group" id="status-pills">
+      <button class="pill active" data-status=""><span>Tous</span><span class="count" id="c-all">—</span></button>
+      <button class="pill" data-status="OK"><span style="color:var(--green)">●</span><span>Posés</span><span class="count" id="c-ok">—</span></button>
+      <button class="pill" data-status="Anomalie"><span style="color:var(--amber)">●</span><span>Anomalies</span><span class="count" id="c-ano">—</span></button>
+      <button class="pill" data-status="NOK"><span style="color:var(--red)">●</span><span>NOK</span><span class="count" id="c-nok">—</span></button>
+      <button class="pill" data-status="RAF"><span style="color:var(--gray)">●</span><span>À faire</span><span class="count" id="c-raf">—</span></button>
+    </div>
+    <div class="pills-group" id="region-pills">
+      <button class="pill active" data-region=""><span>France</span></button>
+    </div>
   </div>
   <div class="table-wrap">
     <table>
@@ -828,11 +937,11 @@ a:hover { text-decoration: underline; }
 
 <div id="tab-map" class="section no-padding">
   <div class="map-toolbar">
-    <input type="text" id="map-search" placeholder="🔍 Recherche carte : Code FR, ville, N° série Iloq...">
-    <select id="map-filter-status">
+    <input type="text" id="map-search" class="search-input" placeholder="Rechercher sur la carte...">
+    <select id="map-filter-status" class="search-input" style="background-image:none; padding-left:14px; min-width:auto; max-width:160px;">
       <option value="">Tous statuts</option><option value="OK">OK</option><option value="NOK">NOK</option><option value="Anomalie">Anomalie</option><option value="RAF">RAF</option>
     </select>
-    <select id="map-filter-region"><option value="">Toutes régions</option></select>
+    <select id="map-filter-region" class="search-input" style="background-image:none; padding-left:14px; min-width:auto; max-width:160px;"><option value="">Toutes régions</option></select>
     <div class="map-stats">
       <span class="stat"><span class="dot" style="background:var(--green)"></span><strong id="m-ok">—</strong> OK</span>
       <span class="stat"><span class="dot" style="background:var(--red)"></span><strong id="m-nok">—</strong> NOK</span>
@@ -841,18 +950,18 @@ a:hover { text-decoration: underline; }
       <span class="stat"><strong id="m-shown">—</strong> affichés</span>
     </div>
   </div>
-  <div id="map"><div class="map-loading"><span class="loader"></span> Chargement de la carte...</div></div>
+  <div id="map"><div class="map-loading"><span class="loader"></span> Chargement...</div></div>
 </div>
 
 <div id="tab-analytics" class="section">
   <div class="analytics-grid">
     <div class="chart-card">
-      <div class="chart-title">📈 Évolution cumulée des poses</div>
-      <div class="chart-subtitle">Progression des poses OK depuis le début de la campagne</div>
+      <div class="chart-title">📈 Évolution cumulée</div>
+      <div class="chart-subtitle">Progression des poses OK</div>
       <div class="chart-container"><canvas id="chart-cumul"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-title">🥧 Répartition des statuts</div>
+      <div class="chart-title">🥧 Répartition</div>
       <div class="chart-subtitle">Vue d'ensemble du périmètre</div>
       <div class="chart-container"><canvas id="chart-pie"></canvas></div>
     </div>
@@ -865,13 +974,13 @@ a:hover { text-decoration: underline; }
     </div>
     <div class="chart-card">
       <div class="chart-title">💶 Cumul facturable</div>
-      <div class="chart-subtitle">Évolution du chiffre d'affaires généré</div>
+      <div class="chart-subtitle">Évolution du chiffre d'affaires</div>
       <div class="chart-container"><canvas id="chart-eur"></canvas></div>
     </div>
   </div>
   <div class="chart-card" style="margin-top:20px;">
-    <div class="chart-title">🔥 Heatmap des poses par jour</div>
-    <div class="chart-subtitle">Intensité des poses sur les 12 dernières semaines (lundi à dimanche)</div>
+    <div class="chart-title">🔥 Heatmap des poses</div>
+    <div class="chart-subtitle">Intensité sur les 12 dernières semaines</div>
     <div id="heatmap"></div>
     <div class="heatmap-legend">
       Moins
@@ -890,12 +999,12 @@ a:hover { text-decoration: underline; }
 <div id="tab-finance" class="section">
   <div class="fin-grid">
     <div class="fin-card">
-      <div class="fin-label">Budget total engagé</div>
+      <div class="fin-label">Budget engagé</div>
       <div class="fin-value" id="fin-budget">—</div>
-      <div style="font-size:11px; color:var(--text-muted); margin-top:6px; font-weight:500;">601 × 100 €/pose nominale</div>
+      <div style="font-size:11px; color:var(--text-muted); margin-top:6px; font-weight:500;">601 × 100 €/pose</div>
     </div>
     <div class="fin-card">
-      <div class="fin-label">Réalisé pose OK</div>
+      <div class="fin-label">Réalisé OK</div>
       <div class="fin-value" id="fin-ok" style="color:var(--green);">—</div>
       <div class="fin-bar"><div class="fin-bar-fill" id="fin-bar"></div></div>
     </div>
@@ -905,12 +1014,14 @@ a:hover { text-decoration: underline; }
       <div style="font-size:11px; color:var(--text-muted); margin-top:6px; font-weight:500;">Cadenas + chaînes</div>
     </div>
     <div class="fin-card">
-      <div class="fin-label">Coût NOK (déplacements)</div>
+      <div class="fin-label">Coût NOK</div>
       <div class="fin-value" id="fin-nok" style="color:var(--red);">—</div>
+      <div style="font-size:11px; color:var(--text-muted); margin-top:6px; font-weight:500;">Déplacements</div>
     </div>
     <div class="fin-card">
-      <div class="fin-label">Total facturable à date</div>
+      <div class="fin-label">Total facturable</div>
       <div class="fin-value" id="fin-total">—</div>
+      <div style="font-size:11px; color:var(--text-muted); margin-top:6px; font-weight:500;">À date</div>
     </div>
   </div>
   <h3 style="font-size:15px; margin:20px 0 14px; font-weight:600;">Détail des prestations</h3>
@@ -936,9 +1047,7 @@ function loadScript(urls, onLoad, onFail) {
   tryNext();
 }
 
-let leafletReady = false;
-let papaReady = false;
-let chartReady = false;
+let leafletReady = false, papaReady = false, chartReady = false;
 let charts = {};
 
 loadScript([
@@ -963,22 +1072,18 @@ const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRpKD5N4jRIF-
 const PRIX = { OK: 100, NOK: 70, CADENAS_SUPP: 49.50, CHAINE: 45.84 };
 
 let allData = [];
-let map = null;
-let markers = [];
-let mapInitialized = false;
+let map = null, markers = [], mapInitialized = false;
+let currentStatus = '', currentRegion = '';
 
 function parseCsvFallback(text) {
   const lines = text.split(/\r?\n/).filter(l => l.length > 0);
   if (lines.length === 0) return { data: [] };
   const parseLine = (line) => {
-    const result = [];
-    let cur = '', inQuotes = false;
+    const result = []; let cur = '', inQuotes = false;
     for (let i = 0; i < line.length; i++) {
       const c = line[i];
-      if (c === '"') {
-        if (inQuotes && line[i+1] === '"') { cur += '"'; i++; }
-        else inQuotes = !inQuotes;
-      } else if (c === ',' && !inQuotes) { result.push(cur); cur = ''; }
+      if (c === '"') { if (inQuotes && line[i+1] === '"') { cur += '"'; i++; } else inQuotes = !inQuotes; }
+      else if (c === ',' && !inQuotes) { result.push(cur); cur = ''; }
       else cur += c;
     }
     result.push(cur);
@@ -1010,7 +1115,6 @@ function isYes(v) {
 
 function parseDate(s) {
   if (!s) return null;
-  // Support YYYY-MM-DD ou DD/MM/YYYY
   const iso = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
   if (iso) return new Date(iso[1], iso[2]-1, iso[3]);
   const fr = s.match(/^(\d{2})\/(\d{2})\/(\d{4})/);
@@ -1021,49 +1125,55 @@ function parseDate(s) {
 
 function formatDateFr(d) {
   if (!d) return '—';
-  return d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
+  return d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
 }
 
-function isWorkingDay(d) {
-  const day = d.getDay();
-  return day >= 1 && day <= 5;
-}
+function isWorkingDay(d) { const day = d.getDay(); return day >= 1 && day <= 5; }
 
 function workingDaysBetween(start, end) {
   let count = 0;
   const cur = new Date(start);
-  while (cur <= end) {
-    if (isWorkingDay(cur)) count++;
-    cur.setDate(cur.getDate() + 1);
-  }
+  while (cur <= end) { if (isWorkingDay(cur)) count++; cur.setDate(cur.getDate() + 1); }
   return count;
 }
 
 function addWorkingDays(start, days) {
   const cur = new Date(start);
   let added = 0;
-  while (added < days) {
-    cur.setDate(cur.getDate() + 1);
-    if (isWorkingDay(cur)) added++;
-  }
+  while (added < days) { cur.setDate(cur.getDate() + 1); if (isWorkingDay(cur)) added++; }
   return cur;
 }
 
-function animateValue(el, target, duration = 800, suffix = '') {
+function animateValue(el, target, duration = 800, isText = false) {
   if (!el) return;
+  if (isText) { el.textContent = target; return; }
   const start = parseInt((el.textContent || '0').replace(/[^\d-]/g, '')) || 0;
   const range = target - start;
-  if (range === 0) { el.textContent = target + suffix; return; }
+  if (range === 0) { el.textContent = target; return; }
   const startTime = performance.now();
   function update(currentTime) {
     const elapsed = currentTime - startTime;
     const progress = Math.min(elapsed / duration, 1);
     const eased = 1 - Math.pow(1 - progress, 3);
     const current = Math.round(start + range * eased);
-    el.textContent = current + suffix;
+    el.textContent = current;
     if (progress < 1) requestAnimationFrame(update);
   }
   requestAnimationFrame(update);
+}
+
+function getInitials(name) {
+  if (!name) return '?';
+  const parts = name.trim().split(/\s+/);
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length-1][0]).toUpperCase();
+}
+
+function avatarColor(name) {
+  if (!name) return 'c1';
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  return 'c' + (Math.abs(hash) % 7 + 1);
 }
 
 async function loadData() {
@@ -1091,8 +1201,8 @@ async function loadData() {
       cadenasSupp: isYes(row['Cadenas suppl.']),
       chaine: isYes(row['Chaîne'])
     })).filter(d => d.codeFR);
-    document.getElementById('last-update').textContent = 'Mis à jour : ' + new Date().toLocaleTimeString('fr-FR');
-    populateRegionFilter();
+    document.getElementById('last-update').textContent = 'Mis à jour à ' + new Date().toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'});
+    populateRegionPills();
     renderAll();
     if (chartReady) renderCharts();
     if (document.getElementById('tab-map').classList.contains('active')) tryRenderMap();
@@ -1102,17 +1212,41 @@ async function loadData() {
   }
 }
 
-function populateRegionFilter() {
+function populateRegionPills() {
   const regions = [...new Set(allData.map(d => d.region).filter(Boolean))].sort();
-  const opts = '<option value="">Toutes régions</option>' + regions.map(r => `<option>${r}</option>`).join('');
-  document.getElementById('filter-region').innerHTML = opts;
-  document.getElementById('map-filter-region').innerHTML = opts;
+  const pillsHtml = '<button class="pill active" data-region=""><span>France</span></button>' +
+    regions.map(r => `<button class="pill" data-region="${r}"><span>${r}</span></button>`).join('');
+  document.getElementById('region-pills').innerHTML = pillsHtml;
+  
+  // Reattach listeners
+  document.querySelectorAll('#region-pills .pill').forEach(p => {
+    p.addEventListener('click', function() {
+      document.querySelectorAll('#region-pills .pill').forEach(x => x.classList.remove('active'));
+      this.classList.add('active');
+      currentRegion = this.dataset.region;
+      renderTable();
+    });
+  });
+
+  // Region filter for map
+  const regSelect = document.getElementById('map-filter-region');
+  regSelect.innerHTML = '<option value="">Toutes régions</option>' + regions.map(r => `<option>${r}</option>`).join('');
 }
 
-function getFiltered(prefix) {
-  const q = (document.getElementById(prefix + 'search')?.value || '').toLowerCase();
-  const s = document.getElementById(prefix + 'filter-status').value;
-  const r = document.getElementById(prefix + 'filter-region').value;
+function getFiltered(forMap = false) {
+  const q = forMap 
+    ? (document.getElementById('map-search')?.value || '').toLowerCase()
+    : (document.getElementById('search')?.value || '').toLowerCase();
+  
+  let s, r;
+  if (forMap) {
+    s = document.getElementById('map-filter-status').value;
+    r = document.getElementById('map-filter-region').value;
+  } else {
+    s = currentStatus;
+    r = currentRegion;
+  }
+  
   return allData.filter(d =>
     (!q || d.codeFR.toLowerCase().includes(q) || d.nom.toLowerCase().includes(q) || d.ville.toLowerCase().includes(q) || d.iloq.toLowerCase().includes(q)) &&
     (!s || d.statut === s) &&
@@ -1126,22 +1260,32 @@ function badge(s) {
 }
 
 function renderTable() {
-  const filtered = getFiltered('');
+  const filtered = getFiltered(false);
   const tbody = document.getElementById('tbody');
   if (filtered.length === 0) {
     tbody.innerHTML = '<tr><td colspan="9" class="empty">Aucun résultat</td></tr>';
   } else {
-    tbody.innerHTML = filtered.map(d => `
+    tbody.innerHTML = filtered.map(d => {
+      const initials = getInitials(d.tech);
+      const avColor = avatarColor(d.tech);
+      const techHtml = d.tech 
+        ? `<div class="tech-avatar"><span class="avatar ${avColor}">${initials}</span><span>${d.tech}</span></div>`
+        : '—';
+      return `
       <tr>
         <td><span class="code">${d.codeFR}</span></td>
-        <td>${d.nom}</td><td>${d.ville}</td><td>${d.region}</td>
+        <td><div class="site-info"><span class="site-name">${d.nom || '—'}</span></div></td>
+        <td>${d.ville || '—'}</td>
+        <td><span class="region-tag">${d.region || '—'}</span></td>
         <td>${badge(d.statut)}</td>
-        <td><span class="code">${d.iloq || '—'}</span></td>
-        <td>${d.datePose || '—'}</td><td>${d.tech || '—'}</td>
-        <td>${d.pdfUrl ? `<a href="${d.pdfUrl}" target="_blank" rel="noopener" class="pdf-link" title="Télécharger">📄</a>` : '—'}</td>
-      </tr>`).join('');
+        <td><span class="iloq-code">${d.iloq || '—'}</span></td>
+        <td>${d.datePose || '—'}</td>
+        <td>${techHtml}</td>
+        <td>${d.pdfUrl ? `<a href="${d.pdfUrl}" target="_blank" rel="noopener" class="pdf-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>PDF</a>` : '—'}</td>
+      </tr>`;
+    }).join('');
   }
-  document.getElementById('row-count').innerHTML = `<strong>${filtered.length}</strong> site${filtered.length>1?'s':''} affiché${filtered.length>1?'s':''} sur ${allData.length}`;
+  document.getElementById('row-count').innerHTML = `<strong>${filtered.length}</strong> site${filtered.length>1?'s':''} sur ${allData.length}`;
 }
 
 function renderKPIs() {
@@ -1158,62 +1302,58 @@ function renderKPIs() {
   animateValue(document.getElementById('kpi-ano'), ano);
   animateValue(document.getElementById('kpi-raf'), raf);
 
-  document.getElementById('kpi-ok-pct').textContent = pct(ok);
-  document.getElementById('kpi-nok-pct').textContent = pct(nok);
-  document.getElementById('kpi-raf-pct').textContent = pct(raf);
+  document.getElementById('kpi-ok-pct').textContent = pct(ok) + ' du périmètre';
+  document.getElementById('kpi-nok-pct').textContent = pct(nok) + ' à reprogrammer';
+  document.getElementById('kpi-raf-pct').textContent = pct(raf) + ' du périmètre';
+
+  // Update pill counts
+  document.getElementById('c-all').textContent = total;
+  document.getElementById('c-ok').textContent = ok;
+  document.getElementById('c-nok').textContent = nok;
+  document.getElementById('c-ano').textContent = ano;
+  document.getElementById('c-raf').textContent = raf;
 
   const nbCadenas = allData.filter(d => d.cadenasSupp).length;
   const nbChaines = allData.filter(d => d.chaine).length;
   const totalRealise = ok * PRIX.OK + nok * PRIX.NOK + nbCadenas * PRIX.CADENAS_SUPP + nbChaines * PRIX.CHAINE;
   const budget = total * PRIX.OK;
-  document.getElementById('kpi-eur').textContent = totalRealise.toLocaleString('fr-FR', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' €';
-  document.getElementById('kpi-eur-pct').textContent = budget ? '/ ' + budget.toLocaleString('fr-FR') + ' €' : '—';
+  document.getElementById('kpi-eur').textContent = Math.round(totalRealise).toLocaleString('fr-FR') + ' €';
+  document.getElementById('kpi-eur-pct').textContent = budget ? 'sur ' + budget.toLocaleString('fr-FR') + ' €' : '—';
 }
 
 function renderLiveStats() {
-  // Sites OK avec date de pose
   const okSites = allData.filter(d => d.statut === 'OK' && d.datePoseObj);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  // Date de pose la plus ancienne
   const dates = okSites.map(d => d.datePoseObj).filter(d => d).sort((a, b) => a - b);
   const firstDate = dates[0];
 
-  // Taux de pose moyen
-  let rate = 0;
-  let workDays = 0;
+  let rate = 0, workDays = 0;
   if (firstDate) {
     workDays = workingDaysBetween(firstDate, today);
     rate = workDays > 0 ? okSites.length / workDays : 0;
   }
 
-  // Prédiction de fin
   const raf = allData.filter(d => d.statut === 'RAF').length;
   let endDate = null;
   if (rate > 0 && raf > 0) {
     const daysNeeded = Math.ceil(raf / rate);
     endDate = addWorkingDays(today, daysNeeded);
-  } else if (raf === 0 && okSites.length > 0) {
-    endDate = today;
-  }
+  } else if (raf === 0 && okSites.length > 0) endDate = today;
 
-  // Sites posés aujourd'hui
   const todaySites = okSites.filter(d => {
     const dp = new Date(d.datePoseObj);
     dp.setHours(0, 0, 0, 0);
     return dp.getTime() === today.getTime();
   }).length;
 
-  // Sites posés sur 7 derniers jours
   const weekAgo = new Date(today);
   weekAgo.setDate(weekAgo.getDate() - 7);
   const weekSites = okSites.filter(d => d.datePoseObj >= weekAgo).length;
 
-  // Affichage
   document.getElementById('live-rate').textContent = rate > 0 ? rate.toFixed(1) : '—';
-  document.getElementById('live-rate-sub').textContent = workDays > 0 ? `sur ${workDays} j ouvrés` : 'sites par jour ouvré';
-
+  document.getElementById('live-rate-sub').textContent = workDays > 0 ? `sur ${workDays} j ouvrés écoulés` : 'sites par jour ouvré';
   document.getElementById('live-end-date').textContent = endDate ? formatDateFr(endDate) : '—';
   if (endDate) {
     const remainingDays = workingDaysBetween(today, endDate);
@@ -1221,12 +1361,9 @@ function renderLiveStats() {
   } else {
     document.getElementById('live-end-sub').textContent = 'données insuffisantes';
   }
-
   document.getElementById('live-today').textContent = todaySites;
   document.getElementById('live-today-sub').textContent = todaySites > 1 ? 'poses du jour' : 'pose du jour';
-
   document.getElementById('live-week').textContent = weekSites;
-  document.getElementById('live-week-sub').textContent = 'poses sur 7 jours';
 }
 
 function renderRegions() {
@@ -1253,7 +1390,6 @@ function renderRegions() {
 function renderCharts() {
   if (!chartReady || allData.length === 0) return;
 
-  // === 1. Évolution cumulée ===
   const okSites = allData.filter(d => d.statut === 'OK' && d.datePoseObj).sort((a, b) => a.datePoseObj - b.datePoseObj);
   const cumulData = {};
   let cumul = 0;
@@ -1271,34 +1407,16 @@ function renderCharts() {
       type: 'line',
       data: {
         labels: cumulLabels.map(d => new Date(d).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' })),
-        datasets: [{
-          label: 'Sites OK cumulés',
-          data: cumulValues,
-          borderColor: '#1D9E75',
-          backgroundColor: 'rgba(29,158,117,0.1)',
-          fill: true,
-          tension: 0.3,
-          pointRadius: 3,
-          pointHoverRadius: 6,
-          borderWidth: 2.5
-        }]
+        datasets: [{ label: 'Sites OK', data: cumulValues, borderColor: '#1D9E75', backgroundColor: 'rgba(29,158,117,0.1)', fill: true, tension: 0.3, pointRadius: 3, pointHoverRadius: 6, borderWidth: 2.5 }]
       },
       options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: { backgroundColor: '#1a1d23', padding: 10, cornerRadius: 6, titleFont: { size: 12 }, bodyFont: { size: 13 } }
-        },
-        scales: {
-          y: { beginAtZero: true, grid: { color: '#e8eaed' }, ticks: { font: { size: 11 } } },
-          x: { grid: { display: false }, ticks: { font: { size: 11 }, maxRotation: 45 } }
-        }
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0f1419', padding: 10, cornerRadius: 6 } },
+        scales: { y: { beginAtZero: true, grid: { color: '#e8eaed' } }, x: { grid: { display: false } } }
       }
     });
   }
 
-  // === 2. Camembert statuts ===
   const total = allData.length;
   const ok = allData.filter(d => d.statut === 'OK').length;
   const nok = allData.filter(d => d.statut === 'NOK').length;
@@ -1308,35 +1426,16 @@ function renderCharts() {
   if (charts.pie) charts.pie.destroy();
   charts.pie = new Chart(document.getElementById('chart-pie'), {
     type: 'doughnut',
-    data: {
-      labels: ['OK', 'NOK', 'Anomalie', 'RAF'],
-      datasets: [{
-        data: [ok, nok, ano, raf],
-        backgroundColor: ['#1D9E75', '#C53030', '#B7791F', '#9ca3af'],
-        borderWidth: 0,
-        hoverOffset: 8
-      }]
-    },
+    data: { labels: ['OK', 'NOK', 'Anomalie', 'RAF'], datasets: [{ data: [ok, nok, ano, raf], backgroundColor: ['#1D9E75', '#C53030', '#B7791F', '#9ca3af'], borderWidth: 0, hoverOffset: 8 }] },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      cutout: '65%',
+      responsive: true, maintainAspectRatio: false, cutout: '65%',
       plugins: {
-        legend: {
-          position: 'bottom',
-          labels: { padding: 14, boxWidth: 12, font: { size: 12 }, usePointStyle: true, pointStyle: 'circle' }
-        },
-        tooltip: {
-          backgroundColor: '#1a1d23',
-          padding: 10,
-          cornerRadius: 6,
-          callbacks: { label: (c) => `${c.label}: ${c.parsed} (${Math.round(c.parsed/total*100)}%)` }
-        }
+        legend: { position: 'bottom', labels: { padding: 14, boxWidth: 12, font: { size: 12 }, usePointStyle: true, pointStyle: 'circle' } },
+        tooltip: { backgroundColor: '#0f1419', padding: 10, cornerRadius: 6, callbacks: { label: (c) => `${c.label}: ${c.parsed} (${Math.round(c.parsed/total*100)}%)` } }
       }
     }
   });
 
-  // === 3. Histogramme par région ===
   const regions = {};
   allData.forEach(d => {
     if (!d.region) return;
@@ -1357,24 +1456,15 @@ function renderCharts() {
       ]
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { position: 'bottom', labels: { padding: 14, boxWidth: 12, font: { size: 12 }, usePointStyle: true, pointStyle: 'circle' } },
-        tooltip: { backgroundColor: '#1a1d23', padding: 10, cornerRadius: 6 }
-      },
-      scales: {
-        y: { beginAtZero: true, stacked: true, grid: { color: '#e8eaed' }, ticks: { font: { size: 11 } } },
-        x: { stacked: true, grid: { display: false }, ticks: { font: { size: 11 } } }
-      }
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { padding: 14, boxWidth: 12, usePointStyle: true, pointStyle: 'circle' } }, tooltip: { backgroundColor: '#0f1419', padding: 10, cornerRadius: 6 } },
+      scales: { y: { beginAtZero: true, stacked: true, grid: { color: '#e8eaed' } }, x: { stacked: true, grid: { display: false } } }
     }
   });
 
-  // === 4. Cumul facturable ===
   const eurData = {};
   let cumulEur = 0;
-  const allSorted = [...okSites].sort((a,b) => a.datePoseObj - b.datePoseObj);
-  allSorted.forEach(d => {
+  okSites.forEach(d => {
     const key = d.datePoseObj.toISOString().slice(0, 10);
     cumulEur += PRIX.OK;
     if (d.cadenasSupp) cumulEur += PRIX.CADENAS_SUPP;
@@ -1390,43 +1480,16 @@ function renderCharts() {
       type: 'line',
       data: {
         labels: eurLabels.map(d => new Date(d).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' })),
-        datasets: [{
-          label: 'Cumul €',
-          data: eurValues,
-          borderColor: '#1F4E79',
-          backgroundColor: 'rgba(31,78,121,0.1)',
-          fill: true,
-          tension: 0.3,
-          pointRadius: 3,
-          pointHoverRadius: 6,
-          borderWidth: 2.5
-        }]
+        datasets: [{ label: 'Cumul €', data: eurValues, borderColor: '#1F4E79', backgroundColor: 'rgba(31,78,121,0.1)', fill: true, tension: 0.3, pointRadius: 3, borderWidth: 2.5 }]
       },
       options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            backgroundColor: '#1a1d23',
-            padding: 10,
-            cornerRadius: 6,
-            callbacks: { label: (c) => c.parsed.y.toLocaleString('fr-FR') + ' €' }
-          }
-        },
-        scales: {
-          y: {
-            beginAtZero: true,
-            grid: { color: '#e8eaed' },
-            ticks: { font: { size: 11 }, callback: (v) => v.toLocaleString('fr-FR') + ' €' }
-          },
-          x: { grid: { display: false }, ticks: { font: { size: 11 }, maxRotation: 45 } }
-        }
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0f1419', padding: 10, cornerRadius: 6, callbacks: { label: (c) => c.parsed.y.toLocaleString('fr-FR') + ' €' } } },
+        scales: { y: { beginAtZero: true, grid: { color: '#e8eaed' }, ticks: { callback: (v) => v.toLocaleString('fr-FR') + ' €' } }, x: { grid: { display: false } } }
       }
     });
   }
 
-  // === 5. Heatmap ===
   renderHeatmap();
 }
 
@@ -1434,9 +1497,8 @@ function renderHeatmap() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const startDate = new Date(today);
-  startDate.setDate(startDate.getDate() - 84); // 12 semaines
+  startDate.setDate(startDate.getDate() - 84);
 
-  // Compter les poses par jour
   const counts = {};
   allData.filter(d => d.statut === 'OK' && d.datePoseObj).forEach(d => {
     const key = d.datePoseObj.toISOString().slice(0, 10);
@@ -1454,21 +1516,14 @@ function renderHeatmap() {
   };
 
   let html = '<div style="display:flex; gap:4px; align-items:flex-start;">';
-  // Labels jours (en colonne à gauche)
   html += '<div style="display:flex; flex-direction:column; gap:4px; font-size:10px; color:var(--text-muted); padding-top:18px;">';
-  ['L', 'M', 'M', 'J', 'V', 'S', 'D'].forEach((day, i) => {
-    html += `<div style="height:18px; line-height:18px;">${day}</div>`;
-  });
+  ['L', 'M', 'M', 'J', 'V', 'S', 'D'].forEach((day) => { html += `<div style="height:18px; line-height:18px;">${day}</div>`; });
   html += '</div>';
 
-  // Grille
-  html += '<div style="flex:1; overflow-x:auto;">';
-  html += '<div style="display:flex; gap:4px;">';
+  html += '<div style="flex:1; overflow-x:auto;"><div style="display:flex; gap:4px;">';
 
-  // Préparer les semaines
   const weeks = [];
   let cur = new Date(startDate);
-  // Aligner au lundi
   while (cur.getDay() !== 1) cur.setDate(cur.getDate() - 1);
 
   while (cur <= today) {
@@ -1484,7 +1539,6 @@ function renderHeatmap() {
 
   weeks.forEach((week, i) => {
     html += '<div style="display:flex; flex-direction:column; gap:4px;">';
-    // Label mois en haut (1ère semaine du mois)
     const firstDay = week[0].date;
     const isNewMonth = i === 0 || firstDay.getMonth() !== weeks[i-1][0].date.getMonth();
     html += `<div style="height:14px; font-size:10px; color:var(--text-muted);">${isNewMonth ? firstDay.toLocaleDateString('fr-FR', { month: 'short' }) : ''}</div>`;
@@ -1508,8 +1562,7 @@ function renderHeatmap() {
 function popupHtml(d) {
   const cls = d.statut === 'OK' ? 'ok' : d.statut === 'NOK' ? 'nok' : d.statut === 'Anomalie' ? 'ano' : 'raf';
   const gmaps = `https://www.google.com/maps/dir/?api=1&destination=${d.lat},${d.lon}`;
-  return `
-    <h4>${d.codeFR}</h4>
+  return `<h4>${d.codeFR}</h4>
     <div><strong>${d.nom || ''}</strong></div>
     ${d.adresse ? `<div style="font-size:12px;color:#8b919b">${d.adresse}</div>` : ''}
     <div style="font-size:12px;color:#8b919b">${d.ville || ''} · ${d.region || ''}</div>
@@ -1519,8 +1572,7 @@ function popupHtml(d) {
     <div class="popup-actions">
       <a href="${gmaps}" target="_blank" rel="noopener" class="popup-btn primary">🚗 Itinéraire</a>
       ${d.pdfUrl ? `<a href="${d.pdfUrl}" target="_blank" rel="noopener" class="popup-btn">📄 PDF</a>` : ''}
-    </div>
-  `;
+    </div>`;
 }
 
 function tryRenderMap() {
@@ -1530,7 +1582,7 @@ function tryRenderMap() {
   if (!mapInitialized) {
     mapEl.innerHTML = '';
     map = L.map('map', { zoomControl: true, preferCanvas: true }).setView([46.6, 2.5], 6);
-    const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap', maxZoom: 19 });
+    const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OSM', maxZoom: 19 });
     const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: '© Esri', maxZoom: 19 });
     const lightLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: '© CartoDB', maxZoom: 19 });
     osmLayer.addTo(map);
@@ -1556,7 +1608,7 @@ function refreshMapMarkers() {
   if (!map) return;
   markers.forEach(m => map.removeLayer(m));
   markers = [];
-  const filtered = getFiltered('map-');
+  const filtered = getFiltered(true);
   const colors = { OK: '#1D9E75', NOK: '#C53030', Anomalie: '#B7791F', RAF: '#9ca3af' };
   filtered.forEach(d => {
     if (!d.lat || !d.lon) return;
@@ -1581,7 +1633,6 @@ function renderFinance() {
   const nbCadenas = allData.filter(d => d.cadenasSupp).length;
   const nbChaines = allData.filter(d => d.chaine).length;
   const total = allData.length;
-
   const budget = total * PRIX.OK;
   const okEur = ok * PRIX.OK;
   const nokEur = nok * PRIX.NOK;
@@ -1589,24 +1640,20 @@ function renderFinance() {
   const chainesEur = nbChaines * PRIX.CHAINE;
   const consoEur = cadenasEur + chainesEur;
   const totalEur = okEur + nokEur + consoEur;
-
   const f = (n) => n.toLocaleString('fr-FR', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' €';
   const fEntier = (n) => n.toLocaleString('fr-FR') + ' €';
-
   document.getElementById('fin-budget').textContent = fEntier(budget);
   document.getElementById('fin-ok').textContent = f(okEur);
   document.getElementById('fin-nok').textContent = f(nokEur);
   document.getElementById('fin-conso').textContent = f(consoEur);
   document.getElementById('fin-total').textContent = f(totalEur);
   document.getElementById('fin-bar').style.width = budget ? Math.round((okEur / budget) * 100) + '%' : '0%';
-
   document.getElementById('fin-detail').innerHTML = `
-    <tr><td style="padding:14px 10px;">Pose OK</td><td style="padding:14px 10px;">100,00 €</td><td style="padding:14px 10px;">${ok}</td><td style="padding:14px 10px;"><strong>${f(okEur)}</strong></td></tr>
-    <tr><td style="padding:14px 10px;">Pose NOK (déplacement)</td><td style="padding:14px 10px;">70,00 €</td><td style="padding:14px 10px;">${nok}</td><td style="padding:14px 10px;"><strong>${f(nokEur)}</strong></td></tr>
-    <tr><td style="padding:14px 10px;">Cadenas supplémentaire</td><td style="padding:14px 10px;">49,50 €</td><td style="padding:14px 10px;">${nbCadenas}</td><td style="padding:14px 10px;"><strong>${f(cadenasEur)}</strong></td></tr>
-    <tr><td style="padding:14px 10px;">Chaîne</td><td style="padding:14px 10px;">45,84 €</td><td style="padding:14px 10px;">${nbChaines}</td><td style="padding:14px 10px;"><strong>${f(chainesEur)}</strong></td></tr>
-    <tr style="background:var(--bg);"><td style="padding:14px 10px;"><strong>TOTAL</strong></td><td></td><td></td><td style="padding:14px 10px;"><strong style="color:var(--primary);font-size:15px;">${f(totalEur)}</strong></td></tr>
-  `;
+    <tr><td style="padding:14px;">Pose OK</td><td style="padding:14px;">100,00 €</td><td style="padding:14px;">${ok}</td><td style="padding:14px;"><strong>${f(okEur)}</strong></td></tr>
+    <tr><td style="padding:14px;">Pose NOK (déplacement)</td><td style="padding:14px;">70,00 €</td><td style="padding:14px;">${nok}</td><td style="padding:14px;"><strong>${f(nokEur)}</strong></td></tr>
+    <tr><td style="padding:14px;">Cadenas supplémentaire</td><td style="padding:14px;">49,50 €</td><td style="padding:14px;">${nbCadenas}</td><td style="padding:14px;"><strong>${f(cadenasEur)}</strong></td></tr>
+    <tr><td style="padding:14px;">Chaîne</td><td style="padding:14px;">45,84 €</td><td style="padding:14px;">${nbChaines}</td><td style="padding:14px;"><strong>${f(chainesEur)}</strong></td></tr>
+    <tr style="background:var(--bg);"><td style="padding:14px;"><strong>TOTAL</strong></td><td></td><td></td><td style="padding:14px;"><strong style="color:var(--primary);font-size:15px;">${f(totalEur)}</strong></td></tr>`;
 }
 
 function renderAll() {
@@ -1627,7 +1674,7 @@ function showTab(event, id) {
 }
 
 function exportCSV() {
-  const filtered = getFiltered('');
+  const filtered = getFiltered(false);
   const headers = ['Code FR', 'Nom site', 'Ville', 'Région', 'Statut', 'N° série Iloq', 'Date pose', 'Technicien', 'Cadenas suppl.', 'Chaîne', 'Lien PDF'];
   const rows = filtered.map(d => [d.codeFR, d.nom, d.ville, d.region, d.statut, d.iloq, d.datePose, d.tech, d.cadenasSupp ? 'Oui' : '', d.chaine ? 'Oui' : '', d.pdfUrl]);
   const csv = [headers, ...rows].map(r => r.map(c => `"${(c||'').toString().replace(/"/g,'""')}"`).join(';')).join('\n');
@@ -1638,12 +1685,21 @@ function exportCSV() {
   a.click();
 }
 
+// Event listeners
 document.getElementById('search').addEventListener('input', renderTable);
-document.getElementById('filter-status').addEventListener('change', renderTable);
-document.getElementById('filter-region').addEventListener('change', renderTable);
 document.getElementById('map-search').addEventListener('input', refreshMapMarkers);
 document.getElementById('map-filter-status').addEventListener('change', refreshMapMarkers);
 document.getElementById('map-filter-region').addEventListener('change', refreshMapMarkers);
+
+// Pills status
+document.querySelectorAll('#status-pills .pill').forEach(p => {
+  p.addEventListener('click', function() {
+    document.querySelectorAll('#status-pills .pill').forEach(x => x.classList.remove('active'));
+    this.classList.add('active');
+    currentStatus = this.dataset.status;
+    renderTable();
+  });
+});
 
 if (papaReady) loadData();
 setInterval(loadData, 5 * 60 * 1000);
