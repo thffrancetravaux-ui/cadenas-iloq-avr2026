@@ -339,6 +339,66 @@ header {
   margin-top: 2px;
 }
 
+ /* === Dashboard Switcher (sélecteur entre Iloq / BAC) === */
+.dashboard-switcher {
+  display: inline-flex;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 4px;
+  gap: 2px;
+  box-shadow: var(--shadow-sm);
+  margin-left: 8px;
+}
+
+.dashboard-switcher a {
+  padding: 8px 16px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.dashboard-switcher a:hover:not(.active) {
+  color: var(--text);
+  background: rgba(255,255,255,0.6);
+}
+
+.dashboard-switcher a.active {
+  background: var(--surface);
+  color: var(--primary);
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+  cursor: default;
+}
+
+.dashboard-switcher a .switcher-icon { font-size: 14px; line-height: 1; }
+
+.dashboard-switcher a .switcher-count {
+  font-size: 10px;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-weight: 600;
+  margin-left: 4px;
+}
+
+.dashboard-switcher a.active .switcher-count {
+  background: rgba(31,78,121,0.1);
+  color: var(--primary);
+}
+
+@media (max-width: 768px) {
+  .dashboard-switcher a { padding: 7px 12px; font-size: 12px; }
+  .dashboard-switcher a .switcher-count { display: none; }
+} 
 /* === Tabs === */
 .tabs {
   display: flex;
@@ -838,6 +898,18 @@ tr:last-child td { border-bottom: none; }
       <h1>Suivi Iloq <span style="color: var(--text-muted); font-weight: 500;">— Lot Avril 2026</span></h1>
       <div class="subtitle"><span>THF / Cellnex</span> · Campagne PROG 2026 · 601 sites</div>
     </div>
+    <nav class="dashboard-switcher" role="navigation" aria-label="Sélection du dashboard">
+  <a href="#" class="active" aria-current="page">
+    <span class="switcher-icon">🔐</span>
+    <span>Suivi Iloq</span>
+    <span class="switcher-count">601</span>
+  </a>
+  <a href="https://suivi-gb-thf.netlify.app" title="Aller vers le dashboard Suivi BAC Grands Bailleurs">
+    <span class="switcher-icon">🏢</span>
+    <span>Suivi BAC GB</span>
+    <span class="switcher-count">457</span>
+  </a>
+</nav>
   </div>
   <div class="header-right">
     <span class="last-update" id="last-update">Connexion...</span>
