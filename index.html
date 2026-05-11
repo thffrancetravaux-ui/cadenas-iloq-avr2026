@@ -338,67 +338,38 @@ header {
   color: rgba(255,255,255,0.5);
   margin-top: 2px;
 }
-
- /* === Dashboard Switcher (sélecteur entre Iloq / BAC) === */
-.dashboard-switcher {
-  display: inline-flex;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 4px;
-  gap: 2px;
-  box-shadow: var(--shadow-sm);
-  margin-left: 8px;
-}
-
-.dashboard-switcher a {
-  padding: 8px 16px;
-  border-radius: 7px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-muted);
-  text-decoration: none;
+/* === Back to Portal Button === */
+.back-to-portal a {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
+  gap: 6px;
+  padding: 8px 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-decoration: none;
   transition: var(--transition);
   white-space: nowrap;
 }
 
-.dashboard-switcher a:hover:not(.active) {
-  color: var(--text);
-  background: rgba(255,255,255,0.6);
-}
-
-.dashboard-switcher a.active {
-  background: var(--surface);
+.back-to-portal a:hover {
+  background: var(--primary-light);
   color: var(--primary);
-  font-weight: 600;
-  box-shadow: var(--shadow-sm);
-  cursor: default;
+  border-color: var(--primary);
+  transform: translateX(-2px);
 }
 
-.dashboard-switcher a .switcher-icon { font-size: 14px; line-height: 1; }
-
-.dashboard-switcher a .switcher-count {
-  font-size: 10px;
-  color: var(--text-muted);
-  background: var(--surface);
-  padding: 2px 6px;
-  border-radius: 10px;
-  font-weight: 600;
-  margin-left: 4px;
+.back-to-portal a .arrow {
+  font-size: 14px;
+  line-height: 1;
+  transition: var(--transition);
 }
 
-.dashboard-switcher a.active .switcher-count {
-  background: rgba(31,78,121,0.1);
-  color: var(--primary);
-}
-
-@media (max-width: 768px) {
-  .dashboard-switcher a { padding: 7px 12px; font-size: 12px; }
-  .dashboard-switcher a .switcher-count { display: none; }
-} 
+.back-to-portal a:hover .arrow { transform: translateX(-2px); }
+ 
 /* === Tabs === */
 .tabs {
   display: flex;
@@ -898,16 +869,10 @@ tr:last-child td { border-bottom: none; }
       <h1>Suivi Iloq <span style="color: var(--text-muted); font-weight: 500;">— Lot Avril 2026</span></h1>
       <div class="subtitle"><span>THF / Cellnex</span> · Campagne PROG 2026 · 601 sites</div>
     </div>
-    <nav class="dashboard-switcher" role="navigation" aria-label="Sélection du dashboard">
-  <a href="#" class="active" aria-current="page">
-    <span class="switcher-icon">🔐</span>
-    <span>Suivi Iloq</span>
-    <span class="switcher-count">601</span>
-  </a>
-  <a href="https://suivi-gb-thf.netlify.app" title="Aller vers le dashboard Suivi BAC Grands Bailleurs">
-    <span class="switcher-icon">🏢</span>
-    <span>Suivi BAC GB</span>
-    <span class="switcher-count">457</span>
+    <nav class="back-to-portal" aria-label="Retour au portail THF">
+  <a href="https://portail-thf.netlify.app" title="Retour au portail THF">
+    <span class="arrow">←</span>
+    <span>Portail THF</span>
   </a>
 </nav>
   </div>
