@@ -537,6 +537,68 @@ tr:last-child td { border-bottom: none; }
 .table-wrap::-webkit-scrollbar { width: 8px; height: 8px; }
 .table-wrap::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
 
+/* Admin-only UI : caché par défaut, montré si body[data-thf-role="admin"] */
+body:not([data-thf-role="admin"]) .admin-only { display: none !important; }
+
+.row-edit-btn {
+  background: #fff; border: 1px solid #e2e8f0; color: #475569;
+  width: 28px; height: 28px; border-radius: 6px; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 13px; transition: all 0.15s;
+}
+.row-edit-btn:hover { background: #eef4fa; border-color: #1F4E79; color: #1F4E79; }
+.row-overridden-mark {
+  display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+  background: #1F4E79; margin-left: 5px; vertical-align: middle;
+}
+.row-overridden { background: rgba(31, 78, 121, 0.03); }
+
+/* Modale d'édition */
+.iloq-edit-overlay {
+  position: fixed; inset: 0; background: rgba(15,20,25,0.5);
+  z-index: 99999; display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.iloq-edit-modal {
+  background: #fff; border-radius: 12px; max-width: 560px; width: 100%;
+  max-height: 92vh; overflow: auto; box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+}
+.iloq-edit-modal .h {
+  padding: 18px 22px; border-bottom: 1px solid #e8eaed;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.iloq-edit-modal form { padding: 18px 22px; display: grid; gap: 12px; }
+.iloq-edit-modal label { font-size: 12px; color: #4a5160; font-weight: 600; }
+.iloq-edit-modal input, .iloq-edit-modal select, .iloq-edit-modal textarea {
+  width: 100%; padding: 8px; border: 1px solid #e8eaed; border-radius: 6px;
+  margin-top: 4px; font-size: 13px; font-family: inherit; box-sizing: border-box;
+}
+.iloq-edit-modal textarea { resize: vertical; }
+.iloq-edit-modal .field-row { display: flex; align-items: flex-start; gap: 8px; }
+.iloq-edit-modal .field-row > label { flex: 1; min-width: 0; }
+.iloq-edit-modal .field-sheet-value {
+  font-size: 11px; color: #94a3b8; margin-top: 2px; font-style: italic;
+}
+.iloq-edit-modal .reset-btn {
+  background: #fff; border: 1px solid #e8eaed; color: #94a3b8;
+  padding: 5px 8px; border-radius: 4px; font-size: 11px; cursor: pointer;
+  margin-top: 20px;
+}
+.iloq-edit-modal .reset-btn:hover { color: #dc2626; border-color: #fecaca; }
+.iloq-edit-modal .actions {
+  display: flex; gap: 10px; justify-content: flex-end;
+  border-top: 1px solid #e8eaed; padding: 14px 22px;
+}
+.iloq-edit-modal .actions button {
+  padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 500;
+}
+.iloq-edit-modal .actions .cancel {
+  background: #fff; border: 1px solid #e8eaed; color: #4a5160;
+}
+.iloq-edit-modal .actions .save {
+  background: #1F4E79; border: none; color: #fff; font-weight: 600;
+}
+
 .code {
   font-family: "SF Mono", Monaco, "JetBrains Mono", Consolas, monospace;
   font-size: 12.5px;
@@ -845,29 +907,358 @@ tr:last-child td { border-bottom: none; }
   .live-stat { border-right: none; padding: 8px 0; }
 }
 </style>
-<script src="./index_files/leaflet.js.télécharger"></script><script src="./index_files/papaparse.min.js.télécharger"></script><script src="./index_files/chart.umd.min.js.télécharger"></script></head>
+<script src="./index_files/leaflet.js.télécharger"></script><script src="./index_files/papaparse.min.js.télécharger"></script><script src="./index_files/chart.umd.min.js.télécharger"></script><style id="thf-auth-style">
+    /* Anti-flash : cache le contenu réel tant que l'auth n'est pas validée */
+    body[data-thf-auth="checking"] > :not(#thf-auth-overlay):not(#thf-auth-style) { visibility: hidden; }
+    body[data-thf-auth="login"]    > :not(#thf-auth-overlay):not(#thf-auth-style) { display: none !important; }
+    body[data-thf-auth="denied"]   > :not(#thf-auth-overlay):not(#thf-auth-style) { display: none !important; }
+    body[data-thf-auth="inactive"] > :not(#thf-auth-overlay):not(#thf-auth-style) { display: none !important; }
+    body[data-thf-auth="ok"]       #thf-auth-overlay { display: none; }
+
+    #thf-auth-overlay {
+        position: fixed; inset: 0;
+        z-index: 999999;
+        background: linear-gradient(135deg, #0a1929 0%, #1a3a5c 100%);
+        display: flex; align-items: center; justify-content: center;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        color: #fff;
+        padding: 20px;
+    }
+    #thf-auth-overlay .thf-card {
+        background: rgba(255,255,255,0.08);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.15);
+        border-radius: 16px;
+        padding: 40px 36px;
+        width: 100%; max-width: 440px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+    #thf-auth-overlay h1 {
+        margin: 0 0 6px; font-size: 22px; font-weight: 600; letter-spacing: -0.01em;
+    }
+    #thf-auth-overlay .thf-site {
+        margin: 0 0 18px; font-size: 13px; color: #4a9eff; font-weight: 500;
+        text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    #thf-auth-overlay p.thf-sub {
+        margin: 0 0 28px; color: rgba(255,255,255,0.7); font-size: 14px; line-height: 1.5;
+    }
+    #thf-auth-overlay input[type="email"] {
+        width: 100%; box-sizing: border-box;
+        padding: 13px 14px;
+        background: rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 10px;
+        color: #fff; font-size: 15px;
+        outline: none; transition: border-color 0.15s;
+    }
+    #thf-auth-overlay input[type="email"]:focus { border-color: #4a9eff; }
+    #thf-auth-overlay input[type="email"]::placeholder { color: rgba(255,255,255,0.4); }
+    #thf-auth-overlay button.thf-btn {
+        width: 100%; margin-top: 12px;
+        padding: 13px 14px;
+        background: #4a9eff; color: #fff;
+        border: none; border-radius: 10px;
+        font-size: 15px; font-weight: 500; cursor: pointer;
+        transition: background 0.15s, transform 0.05s;
+    }
+    #thf-auth-overlay button.thf-btn:hover:not(:disabled) { background: #6bb1ff; }
+    #thf-auth-overlay button.thf-btn:active:not(:disabled) { transform: scale(0.98); }
+    #thf-auth-overlay button.thf-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    #thf-auth-overlay button.thf-btn-ghost {
+        background: transparent; border: 1px solid rgba(255,255,255,0.2);
+        color: rgba(255,255,255,0.85);
+    }
+    #thf-auth-overlay button.thf-btn-ghost:hover:not(:disabled) { background: rgba(255,255,255,0.08); }
+    #thf-auth-overlay .thf-msg {
+        margin-top: 16px; padding: 12px 14px;
+        border-radius: 8px; font-size: 13.5px; line-height: 1.5;
+        display: none;
+    }
+    #thf-auth-overlay .thf-msg.show { display: block; }
+    #thf-auth-overlay .thf-msg.ok  { background: rgba(46,160,67,0.18); color: #6ee08c; border: 1px solid rgba(46,160,67,0.4); }
+    #thf-auth-overlay .thf-msg.err { background: rgba(248,81,73,0.18); color: #ff8b85; border: 1px solid rgba(248,81,73,0.4); }
+    #thf-auth-overlay .thf-foot {
+        margin-top: 24px; padding-top: 20px;
+        border-top: 1px solid rgba(255,255,255,0.1);
+        font-size: 12px; color: rgba(255,255,255,0.5); text-align: center;
+    }
+    #thf-auth-overlay .thf-state-block {
+        display: none; text-align: center;
+    }
+    #thf-auth-overlay .thf-state-block.show { display: block; }
+    #thf-auth-overlay .thf-icon {
+        font-size: 42px; margin-bottom: 16px;
+    }
+
+    /* Bouton logout discret en bas à droite quand connecté */
+    #thf-logout-btn {
+        position: fixed; bottom: 16px; right: 16px;
+        z-index: 99999;
+        padding: 8px 14px;
+        background: rgba(0,0,0,0.6); color: #fff;
+        border: 1px solid rgba(255,255,255,0.15);
+        border-radius: 8px;
+        font-size: 12px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        cursor: pointer;
+        opacity: 0.6; transition: opacity 0.15s;
+    }
+    #thf-logout-btn:hover { opacity: 1; }
+    body[data-thf-auth="ok"] #thf-logout-btn { display: block; }
+    body:not([data-thf-auth="ok"]) #thf-logout-btn { display: none; }
+</style>
+</head>
 <body>
+<div id="thf-auth-overlay">
+    <div class="thf-card">
+        <!-- LOGIN -->
+        <div class="thf-state-block" id="thf-state-login">
+            <h1>Portail THF</h1>
+            <p class="thf-site" id="thf-site-label">Site</p>
+            <p class="thf-sub">Connectez-vous avec votre email professionnel. Un lien magique vous sera envoyé pour accéder au portail.</p>
+            <form id="thf-auth-form" autocomplete="on">
+                <input type="email" id="thf-auth-email" placeholder="prenom.nom@thf-france.com" required autocomplete="email" />
+                <button type="submit" class="thf-btn" id="thf-auth-submit">Recevoir le lien magique</button>
+            </form>
+            <div class="thf-msg" id="thf-auth-msg"></div>
+        </div>
+
+        <!-- ACCÈS REFUSÉ : connecté mais pas d'accès à ce tab -->
+        <div class="thf-state-block" id="thf-state-denied">
+            <div class="thf-icon">🔒</div>
+            <h1>Accès non autorisé</h1>
+            <p class="thf-sub">
+                Votre compte ne dispose pas des droits nécessaires pour accéder à cette section.<br>
+                Connecté en tant que <strong id="thf-denied-email">—</strong>.
+            </p>
+            <button type="button" class="thf-btn" onclick="window.location.href='https://portail-thf.com'">Retour au portail</button>
+            <button type="button" class="thf-btn thf-btn-ghost" id="thf-denied-logout" style="margin-top:8px;">Se déconnecter</button>
+        </div>
+
+        <!-- COMPTE DÉSACTIVÉ -->
+        <div class="thf-state-block" id="thf-state-inactive">
+            <div class="thf-icon">⏸</div>
+            <h1>Compte désactivé</h1>
+            <p class="thf-sub">
+                Votre compte est temporairement désactivé.<br>
+                Connecté en tant que <strong id="thf-inactive-email">—</strong>.
+            </p>
+            <button type="button" class="thf-btn thf-btn-ghost" id="thf-inactive-logout">Se déconnecter</button>
+        </div>
+
+        <div class="thf-foot">THF · Cellnex France &middot; accès restreint</div>
+    </div>
+</div>
+
+<button id="thf-logout-btn" type="button">Déconnexion</button>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function () {
+    "use strict";
+
+    // ============================================================================
+    // CONFIG À ÉDITER POUR CHAQUE SITE
+    // ============================================================================
+    var SUPABASE_URL     = "https://ovgdbawrdreyyxawebwb.supabase.co";
+    var SUPABASE_ANON    = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im92Z2RiYXdyZHJleXl4YXdlYndiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5MDUzMDcsImV4cCI6MjA5NDQ4MTMwN30.zLM-E-Rt2L1r1Ip7924WLTE9c4gtR5Xm6QI3RxacPfg";
+    var THF_REQUIRED_TAB = "iloq-hub";   // null pour portail-thf, sinon "maintenance"/"acces"/"iloq-hub"/"projets-speciaux"
+    var THF_SITE_LABEL   = "Suivi Iloq Lot Avr26";    // Ex. "Suivi Maintenance Cellnex"
+    // ============================================================================
+
+    // Affiche le label dans l'overlay
+    document.getElementById("thf-site-label").textContent = THF_SITE_LABEL;
+
+    // ---------------------------------------------------------------
+    // Storage : cookies .portail-thf.com en prod (SSO sous-domaines),
+    // localStorage en dev et sur *.netlify.app
+    // ---------------------------------------------------------------
+    var host = window.location.hostname;
+    var useSharedCookie = /\.portail-thf\.com$/.test(host) || host === "portail-thf.com";
+    var cookieDomain = ".portail-thf.com";
+
+    function readCookie(name) {
+        var parts = document.cookie.split(";");
+        for (var i = 0; i < parts.length; i++) {
+            var c = parts[i].trim();
+            if (c.indexOf(name + "=") === 0) return decodeURIComponent(c.substring(name.length + 1));
+        }
+        return null;
+    }
+    function writeCookie(name, value, days) {
+        var expires = new Date(Date.now() + days * 86400 * 1000).toUTCString();
+        var secure  = window.location.protocol === "https:" ? ";Secure" : "";
+        document.cookie = name + "=" + encodeURIComponent(value)
+            + ";domain=" + cookieDomain
+            + ";path=/;expires=" + expires
+            + ";SameSite=Lax" + secure;
+    }
+    function deleteCookie(name) {
+        document.cookie = name + "=;domain=" + cookieDomain
+            + ";path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    }
+    var cookieStorage = {
+        getItem:    function (key) { return readCookie(key); },
+        setItem:    function (key, value) { writeCookie(key, value, 7); },
+        removeItem: function (key) { deleteCookie(key); }
+    };
+
+    var clientOptions = {
+        auth: {
+            persistSession:   true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+        }
+    };
+    if (useSharedCookie) clientOptions.auth.storage = cookieStorage;
+
+    var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON, clientOptions);
+
+    // ---------------------------------------------------------------
+    // UI helpers
+    // ---------------------------------------------------------------
+    function setState(state) {
+        document.body.setAttribute("data-thf-auth", state);
+        var blocks = ["login","denied","inactive"];
+        for (var i = 0; i < blocks.length; i++) {
+            var el = document.getElementById("thf-state-" + blocks[i]);
+            if (el) el.classList.toggle("show", state === blocks[i]);
+        }
+    }
+    function showMsg(text, kind) {
+        var el = document.getElementById("thf-auth-msg");
+        el.textContent = text;
+        el.className = "thf-msg show " + (kind || "");
+    }
+    function hideMsg() {
+        var el = document.getElementById("thf-auth-msg");
+        el.className = "thf-msg";
+        el.textContent = "";
+    }
+
+    // ---------------------------------------------------------------
+    // Vérifie les droits d'accès au tab requis après login.
+    // - Lit profiles.active + profiles.role + profiles.allowed_tabs
+    // - Si pas de tab requis (portail-thf), seuls active=true suffit
+    // ---------------------------------------------------------------
+    function checkAccess(user, cb) {
+        supabase
+            .from("profiles")
+            .select("role, allowed_tabs, active, full_name, email")
+            .eq("id", user.id)
+            .single()
+            .then(function (resp) {
+                if (resp.error || !resp.data) {
+                    console.warn("[thfAuth] no profile row", resp.error);
+                    cb({ allowed: false, reason: "no_profile", email: user.email });
+                    return;
+                }
+                var p = resp.data;
+                if (!p.active) {
+                    cb({ allowed: false, reason: "inactive", email: p.email || user.email });
+                    return;
+                }
+                if (!THF_REQUIRED_TAB) {
+                    cb({ allowed: true, profile: p });
+                    return;
+                }
+                if (p.role === "admin") {
+                    cb({ allowed: true, profile: p });
+                    return;
+                }
+                if (Array.isArray(p.allowed_tabs) && p.allowed_tabs.indexOf(THF_REQUIRED_TAB) !== -1) {
+                    cb({ allowed: true, profile: p });
+                    return;
+                }
+                cb({ allowed: false, reason: "no_tab", email: p.email || user.email });
+            });
+    }
+
+    function applySession(session) {
+        if (!session) { setState("login"); return; }
+        var user = session.user;
+        checkAccess(user, function (result) {
+            if (result.allowed) {
+                setState("ok");
+                hideMsg();
+                window.thfAuth.user    = user;
+                window.thfAuth.profile = result.profile;
+                document.body.setAttribute("data-thf-role", (result.profile && result.profile.role) || "user");
+            } else if (result.reason === "inactive") {
+                document.getElementById("thf-inactive-email").textContent = result.email;
+                setState("inactive");
+            } else {
+                // no_tab ou no_profile => écran "accès refusé"
+                document.getElementById("thf-denied-email").textContent = result.email;
+                setState("denied");
+            }
+        });
+    }
+
+    // ---------------------------------------------------------------
+    // Initialisation
+    // ---------------------------------------------------------------
+    setState("checking");
+
+    supabase.auth.getSession().then(function (resp) {
+        applySession(resp && resp.data ? resp.data.session : null);
+    });
+
+    supabase.auth.onAuthStateChange(function (_event, session) {
+        applySession(session);
+    });
+
+    document.getElementById("thf-auth-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        var emailInput = document.getElementById("thf-auth-email");
+        var submitBtn  = document.getElementById("thf-auth-submit");
+        var email      = emailInput.value.trim().toLowerCase();
+        if (!email) return;
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Envoi en cours…";
+        hideMsg();
+
+        supabase.auth.signInWithOtp({
+            email: email,
+            options: { emailRedirectTo: window.location.origin + window.location.pathname }
+        }).then(function (resp) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Recevoir le lien magique";
+            if (resp.error) {
+                showMsg("Erreur : " + resp.error.message, "err");
+            } else {
+                showMsg("Lien envoyé. Vérifiez votre boîte mail (" + email + "), puis cliquez sur le lien reçu pour vous connecter.", "ok");
+                emailInput.value = "";
+            }
+        });
+    });
+
+    function doSignOut() {
+        supabase.auth.signOut().then(function () { setState("login"); });
+    }
+    document.getElementById("thf-logout-btn").addEventListener("click", doSignOut);
+    document.getElementById("thf-denied-logout").addEventListener("click", doSignOut);
+    document.getElementById("thf-inactive-logout").addEventListener("click", doSignOut);
+
+    // Exposé pour debug + usage par le site
+    window.thfAuth = {
+        supabase: supabase,
+        user: null,
+        profile: null,
+        signOut: doSignOut
+    };
+})();
+</script>
+
+
 <div class="app">
 
 <header>
   <div class="header-left">
-    <svg class="logo-svg" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
-      <text x="0" y="48" font-family="Arial Black, Arial, sans-serif" font-size="52" font-weight="900" fill="#1F4E79" letter-spacing="-2">THF</text>
-      <g transform="translate(135, 8)">
-        <circle cx="22" cy="22" r="20" fill="none" stroke="#97C459" stroke-width="3"></circle>
-        <circle cx="22" cy="22" r="14" fill="none" stroke="#97C459" stroke-width="3"></circle>
-        <circle cx="22" cy="22" r="8" fill="none" stroke="#97C459" stroke-width="3"></circle>
-        <g transform="translate(13, 18)">
-          <rect x="0" y="6" width="6" height="14" rx="3" fill="#1F4E79"></rect>
-          <rect x="6" y="2" width="6" height="18" rx="3" fill="#1F4E79"></rect>
-          <rect x="12" y="0" width="6" height="20" rx="3" fill="#1F4E79"></rect>
-          <circle cx="15" cy="-4" r="3" fill="#97C459"></circle>
-        </g>
-      </g>
-    </svg>
     <div class="header-info">
       <h1>Suivi Iloq <span style="color: var(--text-muted); font-weight: 500;">— Lot Avril 2026</span></h1>
-      <div class="subtitle"><span>THF / Cellnex</span> · Campagne PROG 2026 · 601 sites</div>
+      <div class="subtitle">Campagne PROG 2026 · 601 sites</div>
     </div>
     <nav class="back-to-portal" aria-label="Retour au portail THF">
   <a href="https://portail-thf.netlify.app" title="Retour au portail THF">
@@ -960,8 +1351,8 @@ tr:last-child td { border-bottom: none; }
   </div>
   <div class="table-wrap">
     <table>
-      <thead><tr><th>Code FR</th><th>Site</th><th>Ville</th><th>Région</th><th>Statut</th><th>N° série Iloq</th><th>Date pose</th><th>Tech.</th><th>PDF</th></tr></thead>
-      <tbody id="tbody"><tr><td colspan="9" class="empty">❌ Erreur : Failed to fetch</td></tr></tbody>
+      <thead><tr><th>Code FR</th><th>Site</th><th>Ville</th><th>Région</th><th>Statut</th><th>N° série Iloq</th><th>Date pose</th><th>Tech.</th><th>PDF</th><th class="admin-only" style="width:40px;"></th></tr></thead>
+      <tbody id="tbody"><tr><td colspan="10" class="empty">❌ Erreur : Failed to fetch</td></tr></tbody>
     </table>
   </div>
   <div id="row-count">—</div>
@@ -1216,7 +1607,7 @@ function avatarColor(name) {
 async function loadData() {
   if (!papaReady) return;
   try {
-    document.getElementById('tbody').innerHTML = '<tr><td colspan="9" class="empty"><span class="loader"></span> Chargement...</td></tr>';
+    document.getElementById('tbody').innerHTML = '<tr><td colspan="10" class="empty"><span class="loader"></span> Chargement...</td></tr>';
     const r = await fetch(SHEET_URL);
     if (!r.ok) throw new Error('HTTP ' + r.status);
     const text = await r.text();
@@ -1229,15 +1620,27 @@ async function loadData() {
       lon: parseNumber(row['Longitude']),
       lat: parseNumber(row['Latitude']),
       region: row['Région BU'] || '',
-      statut: row['Statut'] || 'RAF',
-      datePose: row['Date de pose'] || '',
+      // Valeurs Sheet (référence brute) — gardées pour l'éventuel reset
+      _sheet_statut:   row['Statut'] || 'RAF',
+      _sheet_datePose: row['Date de pose'] || '',
+      _sheet_iloq:     row['N° série Iloq'] || '',
+      _sheet_tech:     row['Technicien'] || '',
+      // Valeurs effectives (Sheet par défaut, overridées plus bas)
+      statut:    row['Statut'] || 'RAF',
+      datePose:  row['Date de pose'] || '',
       datePoseObj: parseDate(row['Date de pose']),
-      iloq: row['N° série Iloq'] || '',
-      tech: row['Technicien'] || '',
+      iloq:      row['N° série Iloq'] || '',
+      tech:      row['Technicien'] || '',
+      commentaireAdmin: '',
+      _overriddenFields: [], // liste des champs override pour cette ligne
       pdfUrl: row['Lien PDF'] || '',
       cadenasSupp: isYes(row['Cadenas suppl.']),
       chaine: isYes(row['Chaîne'])
     })).filter(d => d.codeFR);
+
+    // Merge les overrides Supabase par-dessus les données Sheet
+    await applyOverrides();
+
     document.getElementById('last-update').textContent = 'Mis à jour à ' + new Date().toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'});
     populateRegionPills();
     renderAll();
@@ -1245,7 +1648,176 @@ async function loadData() {
     if (document.getElementById('tab-map').classList.contains('active')) tryRenderMap();
   } catch (e) {
     console.error(e);
-    document.getElementById('tbody').innerHTML = `<tr><td colspan="9" class="empty">❌ Erreur : ${e.message}</td></tr>`;
+    document.getElementById('tbody').innerHTML = `<tr><td colspan="10" class="empty">❌ Erreur : ${e.message}</td></tr>`;
+  }
+}
+
+// =====================================================================
+// OVERRIDES ADMIN — table iloq_overrides
+// Charge tous les overrides actifs et les applique sur allData
+// =====================================================================
+// =====================================================================
+// MODALE D'ÉDITION ADMIN (5 champs : statut, n° série, date pose, technicien, commentaire admin)
+// =====================================================================
+const ILOQ_STATUT_OPTIONS = ['RAF', 'OK', 'NOK', 'Anomalie'];
+
+window.openIloqEditModal = function(codeFR) {
+  const isAdmin = window.thfAuth && window.thfAuth.profile && window.thfAuth.profile.role === 'admin';
+  if (!isAdmin) { alert('Édition réservée aux administrateurs.'); return; }
+  const d = allData.find(x => x.codeFR === codeFR);
+  if (!d) { alert('Site introuvable.'); return; }
+  const esc = (v) => v == null ? '' : String(v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const overflag = (k) => (d._overriddenFields || []).indexOf(k) >= 0;
+  const sheetLine = (k, val) => overflag(k) ? `<div class="field-sheet-value">Valeur Sheet : ${esc(val) || '— vide —'} <button type="button" class="reset-btn" data-reset="${k}">↺ Reset Sheet</button></div>` : '';
+  const dateIso = (s) => { if (!s) return ''; const m = s.match(/^(\d{4})-(\d{2})-(\d{2})/); if (m) return s.slice(0,10); const f = s.match(/^(\d{2})\/(\d{2})\/(\d{4})/); return f ? f[3]+'-'+f[2]+'-'+f[1] : ''; };
+  const html = `
+    <div class="iloq-edit-overlay" id="iloq-edit-overlay">
+      <div class="iloq-edit-modal">
+        <div class="h">
+          <div>
+            <div style="font-size:12px;color:#6b7280;">Édition site iLOQ</div>
+            <div style="font-size:15px;font-weight:700;color:#1F4E79;margin-top:2px;">${esc(d.codeFR)} · ${esc(d.nom)}</div>
+            <div style="font-size:12px;color:#6b7280;margin-top:2px;">${esc(d.ville)} · ${esc(d.region)}</div>
+          </div>
+          <button onclick="document.getElementById('iloq-edit-overlay').remove()" style="background:none;border:none;font-size:22px;cursor:pointer;color:#6b7280;">×</button>
+        </div>
+        <form id="iloq-edit-form">
+          <label>Statut
+            <select name="statut">
+              ${ILOQ_STATUT_OPTIONS.map(s => `<option value="${s}"${s===d.statut?' selected':''}>${s}</option>`).join('')}
+            </select>
+            ${sheetLine('statut', d._sheet_statut)}
+          </label>
+          <label>N° série Iloq
+            <input type="text" name="n_serie_iloq" value="${esc(d.iloq)}" placeholder="ex: K123456789ABC">
+            ${sheetLine('n_serie_iloq', d._sheet_iloq)}
+          </label>
+          <label>Date de pose
+            <input type="date" name="date_pose" value="${dateIso(d.datePose)}">
+            ${sheetLine('date_pose', d._sheet_datePose)}
+          </label>
+          <label>Technicien
+            <input type="text" name="technicien" value="${esc(d.tech)}" placeholder="ex: THF AN">
+            ${sheetLine('technicien', d._sheet_tech)}
+          </label>
+          <label>Commentaire admin <span style="color:#94a3b8;font-weight:400;">— note interne, n'affecte pas le Sheet</span>
+            <textarea name="commentaire_admin" rows="3" placeholder="Note libre (ex: photo n° série mal placée dans le PDF)">${esc(d.commentaireAdmin)}</textarea>
+          </label>
+          <div id="iloq-edit-msg" style="font-size:12px;min-height:18px;"></div>
+        </form>
+        <div class="actions">
+          <button type="button" class="cancel" onclick="document.getElementById('iloq-edit-overlay').remove()">Annuler</button>
+          <button type="button" class="save" id="iloq-edit-save">💾 Enregistrer</button>
+        </div>
+      </div>
+    </div>`;
+  const wrap = document.createElement('div');
+  wrap.innerHTML = html;
+  document.body.appendChild(wrap.firstElementChild);
+
+  // Reset buttons (chaque champ peut être restauré à la valeur Sheet)
+  document.querySelectorAll('[data-reset]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const field = btn.dataset.reset;
+      if (!confirm(`Restaurer la valeur du Sheet pour "${field}" sur ${d.codeFR} ?\n(supprime l'override de ce champ)`)) return;
+      try {
+        const sb = window.thfAuth.supabase;
+        const { error } = await sb.from('iloq_overrides').delete().eq('code_fr', d.codeFR).eq('field', field);
+        if (error) throw error;
+        document.getElementById('iloq-edit-overlay').remove();
+        await loadData(); // recharge tout
+      } catch (e) { alert('Erreur reset : ' + e.message); }
+    });
+  });
+
+  // Save
+  document.getElementById('iloq-edit-save').addEventListener('click', async () => {
+    const fd = new FormData(document.getElementById('iloq-edit-form'));
+    const msg = document.getElementById('iloq-edit-msg');
+    const btn = document.getElementById('iloq-edit-save');
+    btn.disabled = true; btn.textContent = '⏳ Sauvegarde…';
+    msg.style.color = '#475569'; msg.textContent = '';
+
+    const sb = window.thfAuth.supabase;
+    const email = window.thfAuth.profile && window.thfAuth.profile.email || null;
+    const newValues = {
+      statut:            fd.get('statut') || '',
+      n_serie_iloq:      (fd.get('n_serie_iloq') || '').trim(),
+      date_pose:         fd.get('date_pose') || '',
+      technicien:        (fd.get('technicien') || '').trim(),
+      commentaire_admin: (fd.get('commentaire_admin') || '').trim()
+    };
+    const sheetValues = {
+      statut: d._sheet_statut || '',
+      n_serie_iloq: d._sheet_iloq || '',
+      date_pose: dateIso(d._sheet_datePose),
+      technicien: d._sheet_tech || '',
+      commentaire_admin: '' // pas de valeur Sheet pour ce champ
+    };
+    try {
+      for (const [field, value] of Object.entries(newValues)) {
+        const sheetVal = sheetValues[field];
+        // Si valeur identique à Sheet ET ce n'est pas le commentaire_admin → supprime l'override pour rester aligné Sheet
+        if (field !== 'commentaire_admin' && value === sheetVal) {
+          await sb.from('iloq_overrides').delete().eq('code_fr', d.codeFR).eq('field', field);
+          continue;
+        }
+        // Si valeur vide ET ce n'est pas le commentaire_admin → supprime l'override
+        if (field !== 'commentaire_admin' && value === '' && sheetVal !== '') {
+          // L'admin a explicitement vidé un champ qui était rempli dans le Sheet → on garde l'override "vide"
+          await sb.from('iloq_overrides').upsert({ code_fr: d.codeFR, field, value: '', updated_by_email: email }, { onConflict: 'code_fr,field' });
+          continue;
+        }
+        // Si valeur vide ET sheet vide → rien à faire (delete au cas où il y aurait un override hérité)
+        if (value === '' && sheetVal === '') {
+          await sb.from('iloq_overrides').delete().eq('code_fr', d.codeFR).eq('field', field);
+          continue;
+        }
+        // Sinon → upsert
+        await sb.from('iloq_overrides').upsert({ code_fr: d.codeFR, field, value, updated_by_email: email }, { onConflict: 'code_fr,field' });
+      }
+      msg.style.color = '#16a34a'; msg.textContent = '✅ Modifications enregistrées';
+      setTimeout(async () => {
+        const ov = document.getElementById('iloq-edit-overlay');
+        if (ov) ov.remove();
+        await loadData();
+      }, 800);
+    } catch (e) {
+      msg.style.color = '#dc2626'; msg.textContent = '❌ Erreur : ' + (e.message || e);
+      btn.disabled = false; btn.textContent = '💾 Enregistrer';
+    }
+  });
+};
+
+async function applyOverrides() {
+  const sb = (window.thfAuth && window.thfAuth.supabase) ? window.thfAuth.supabase : null;
+  if (!sb) return;
+  try {
+    const { data, error } = await sb.from('iloq_overrides').select('code_fr,field,value');
+    if (error) throw error;
+    if (!data || data.length === 0) return;
+    // Index par code_fr → { field: value }
+    const byCode = {};
+    data.forEach(o => {
+      if (!byCode[o.code_fr]) byCode[o.code_fr] = {};
+      byCode[o.code_fr][o.field] = o.value;
+    });
+    // Applique sur allData
+    allData.forEach(d => {
+      const ov = byCode[d.codeFR];
+      if (!ov) return;
+      if (ov.n_serie_iloq != null) { d.iloq = ov.n_serie_iloq; d._overriddenFields.push('n_serie_iloq'); }
+      if (ov.statut != null)       { d.statut = ov.statut;     d._overriddenFields.push('statut'); }
+      if (ov.date_pose != null)    {
+        d.datePose = ov.date_pose;
+        d.datePoseObj = parseDate(ov.date_pose);
+        d._overriddenFields.push('date_pose');
+      }
+      if (ov.technicien != null)        { d.tech = ov.technicien;       d._overriddenFields.push('technicien'); }
+      if (ov.commentaire_admin != null) { d.commentaireAdmin = ov.commentaire_admin; d._overriddenFields.push('commentaire_admin'); }
+    });
+  } catch (e) {
+    console.warn('Chargement overrides échoué :', e.message);
   }
 }
 
@@ -1300,25 +1872,28 @@ function renderTable() {
   const filtered = getFiltered(false);
   const tbody = document.getElementById('tbody');
   if (filtered.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="9" class="empty">Aucun résultat</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="10" class="empty">Aucun résultat</td></tr>';
   } else {
     tbody.innerHTML = filtered.map(d => {
       const initials = getInitials(d.tech);
       const avColor = avatarColor(d.tech);
-      const techHtml = d.tech 
+      const techHtml = d.tech
         ? `<div class="tech-avatar"><span class="avatar ${avColor}">${initials}</span><span>${d.tech}</span></div>`
         : '—';
+      const hasOverride = (d._overriddenFields && d._overriddenFields.length > 0);
+      const ovMark = (k) => (d._overriddenFields || []).indexOf(k) >= 0 ? '<span class="row-overridden-mark" title="Valeur modifiée manuellement"></span>' : '';
       return `
-      <tr>
+      <tr class="${hasOverride ? 'row-overridden' : ''}">
         <td><span class="code">${d.codeFR}</span></td>
         <td><div class="site-info"><span class="site-name">${d.nom || '—'}</span></div></td>
         <td>${d.ville || '—'}</td>
         <td><span class="region-tag">${d.region || '—'}</span></td>
-        <td>${badge(d.statut)}</td>
-        <td><span class="iloq-code">${d.iloq || '—'}</span></td>
-        <td>${d.datePose || '—'}</td>
-        <td>${techHtml}</td>
+        <td>${badge(d.statut)}${ovMark('statut')}</td>
+        <td><span class="iloq-code">${d.iloq || '—'}</span>${ovMark('n_serie_iloq')}</td>
+        <td>${d.datePose || '—'}${ovMark('date_pose')}</td>
+        <td>${techHtml}${ovMark('technicien')}</td>
         <td>${d.pdfUrl ? `<a href="${d.pdfUrl}" target="_blank" rel="noopener" class="pdf-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>PDF</a>` : '—'}</td>
+        <td class="admin-only"><button class="row-edit-btn" onclick="openIloqEditModal('${d.codeFR.replace(/'/g,'\\\'')}')" title="Modifier ce site">✏️</button></td>
       </tr>`;
     }).join('');
   }
